@@ -1,40 +1,41 @@
 export const navigationItems = {
   sidebar: [
     {
-      name: 'Dashboard ',
-      to: '/dashboard', 
-      text: 'dashboard',
-      
+      name: "Dashboard ",
+      to: "/dashboard",
+      text: "dashboard",
     },
     {
-      name: 'Tabs Demo ',
-      to: '/tabs', 
-      text:'tabsdemo'
+      name: "Tabs Demo ",
+      to: "/tabs",
+      text: "tabsdemo",
     },
     {
-      name: 'Dynamic Form ',
-      to: '/dynamic-form', 
-      text:'dynamicform'
+      name: "Dynamic Form ",
+      to: "/dynamic-form",
+      text: "dynamicform",
     },
     {
-      name: 'Settings ',
-      to: '/settings', 
-      text:'settings'
+      name: "Timesheet ",
+      to: "/timesheet",
+      text: "timesheet",
     },
     {
-      name: 'Users ',
-      to: '/users', 
-      text:'users'
+      name: "Users ",
+      to: "/users",
+      text: "users",
     },
     {
-      name: 'Example ',
-      to: '/example', 
-      text:'example'
+      name: "Example ",
+      to: "/example",
+      text: "example",
     },
-  ], 
-  footer: [], 
-  
-
-
-}
-export default navigationItems
+    {
+      name: "Proposal Form ",
+      to: "/proposal-form-list",
+      text: "proposalformlist",
+    },
+  ],
+  footer: [],
+};
+export default navigationItems;

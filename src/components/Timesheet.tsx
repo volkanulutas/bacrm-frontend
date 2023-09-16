@@ -122,7 +122,7 @@ interface DataType {
 
 type ColumnTypes = Exclude<EditableTableProps["columns"], undefined>;
 
-const Settings: React.FC = () => {
+const Timesheet: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([
     {
       key: "0",
@@ -282,4 +282,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default Timesheet;
