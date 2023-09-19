@@ -180,7 +180,7 @@ function App() {
                 defaultSelectedKeys={["1"]}
                 theme={themeLcl}
                 defaultOpenKeys={["sub1"]}
-                style={{ height: "200%", borderRight: 0 }}
+                style={{ height: "300%", borderRight: 0 }}
                 onClick={onClick}
                 items={items}
               />

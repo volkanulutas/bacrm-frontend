@@ -175,44 +175,58 @@ const Timesheet: React.FC = () => {
     {
       title: "task",
       dataIndex: "task",
-      width: "30%",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[0],
       dataIndex: "day1",
-      width: "30%",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[1],
       dataIndex: "day2",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[2],
       dataIndex: "day3",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[3],
       dataIndex: "day4",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[4],
       dataIndex: "day5",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[5],
       dataIndex: "day6",
+      width: "12%",
       editable: true,
+      align: "center",
     },
     {
       title: days[6],
       dataIndex: "day7",
+      width: "12%",
       editable: true,
+      align: "center",
     },
   ];
 
@@ -269,13 +283,21 @@ const Timesheet: React.FC = () => {
   return (
     <div>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
+        Kaydet
+      </Button>
+      <Button
+        onClick={handleAdd}
+        type="primary"
+        style={{ marginBottom: 16, marginLeft: 16 }}
+      >
+        Onayla
       </Button>
       <Table
         components={components}
         rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
+        pagination={false}
         columns={columns as ColumnTypes}
       />
     </div>
