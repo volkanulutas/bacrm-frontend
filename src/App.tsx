@@ -60,6 +60,7 @@ const items: MenuItem[] = [
   getItem("Çalışanlar", "employee", <UserOutlined />, [
     getItem("Çalışan Listesi", "employee"),
     getItem("İşçilik", "timesheet"),
+    getItem("Giriş Ekranı", "login-scren")
   ]),
 
   getItem("İzinler", "sub2", <AppstoreOutlined />, [
