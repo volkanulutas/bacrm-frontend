@@ -19,6 +19,8 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import PublicRoutes from "./components/PublicRoutes";
 import PermissionDenied from "./components/PermissionDenied";
 import ProposalFormList from "./components/proposal/ProposalFormList";
+import LeaveApproveForm from "./components/leave/LeaveApproveForm";
+import LeaveForm from "./components/leave/LeaveRequestForm";
 
 const MainRoutes = () => (
   <Routes>
@@ -40,6 +42,8 @@ const MainRoutes = () => (
           <Route path="tab3" element={<Tab3 />} />
         </Route>
         <Route path="timesheet" element={<Timesheet />} />
+        <Route path="leave-form" element={<LeaveForm />} />
+        <Route path="leave-approve-form" element={<LeaveApproveForm />} />
         <Route path="proposal-form-list" element={<ProposalFormList />} />
         <Route path="dynamic-form" element={<DynamicForm />} />
         <Route
