@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import MainRoutes from "./Routes";
 import HeaderMenu from "./components/HeaderMenu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Breadcrumb, Layout, Menu, theme, Space, Button} from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Space, Button } from "antd";
 
 import {
   AppstoreOutlined,
@@ -12,11 +12,11 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+  UserOutlined,
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
 import "./styles.css";
-type MenuItem = Required<MenuProps>['items'][number];
-
+type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
   label: React.ReactNode,
@@ -45,6 +45,10 @@ const items: MenuItem[] = [
     getItem("Proposal Form", "proposal-form-list"),
   ]),
 
+  getItem("Çalışanlar", "employee", <UserOutlined />, [
+    getItem("Çalışan Listesi", "employee"),
+  ]),
+
   getItem("İzinler", "sub2", <AppstoreOutlined />, [
     getItem("İzin Talep Formu", "leave-form"),
     getItem("İzin Onay Formu", "leave-approve-form"),
@@ -52,7 +56,7 @@ const items: MenuItem[] = [
       getItem("Option 7", "7"),
       getItem("Option 8", "8"),
     ]),
-  ])  ,
+  ]),
   getItem("Teklifler", "sub2", <AppstoreOutlined />, [
     getItem("İzin Talep Formu", "leave-form"),
     getItem("İzin Onay Formu", "leave-approve-form"),
@@ -60,10 +64,8 @@ const items: MenuItem[] = [
       getItem("Option 7", "7"),
       getItem("Option 8", "8"),
     ]),
-  ])  
+  ]),
 ];
-
-
 
 const contentStyle: React.CSSProperties = {
   textAlign: "center",
@@ -97,8 +99,6 @@ const headerStyle: React.CSSProperties = {
   backgroundColor: "#F3EFE0",
 };
 
-
-
 function App() {
   const navigation = useNavigate();
   const [current, setCurrent] = useState("1");
@@ -119,27 +119,31 @@ function App() {
     <div className="app">
       <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
         <Layout>
-          <Header style={headerStyle}> <HeaderMenu/></Header>
+          <Header style={headerStyle}>
+            {" "}
+            <HeaderMenu />
+          </Header>
           <Layout hasSider>
-          <Sider width={200} style={{ background: colorBgContainer }}>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            theme='dark'
-            defaultOpenKeys={['sub1']}
-            style={{ height: '100%', borderRight: 0 }}
-            onClick={onClick}
-            items={items}
-          />
-        </Sider>
-            <Content 
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }} > 
-            <MainRoutes />
+            <Sider width={200} style={{ background: colorBgContainer }}>
+              <Menu
+                mode="inline"
+                defaultSelectedKeys={["1"]}
+                theme="dark"
+                defaultOpenKeys={["sub1"]}
+                style={{ height: "100%", borderRight: 0 }}
+                onClick={onClick}
+                items={items}
+              />
+            </Sider>
+            <Content
+              style={{
+                padding: 24,
+                margin: 0,
+                minHeight: 280,
+                background: colorBgContainer,
+              }}
+            >
+              <MainRoutes />
             </Content>
           </Layout>
         </Layout>

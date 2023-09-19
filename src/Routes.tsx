@@ -21,6 +21,7 @@ import PermissionDenied from "./components/PermissionDenied";
 import ProposalFormList from "./components/proposal/ProposalFormList";
 import LeaveApproveForm from "./components/leave/LeaveApproveForm";
 import LeaveForm from "./components/leave/LeaveRequestForm";
+import EmployeeForm from "./EmployeeForm";
 
 const MainRoutes = () => (
   <Routes>
@@ -46,6 +47,7 @@ const MainRoutes = () => (
         <Route path="leave-approve-form" element={<LeaveApproveForm />} />
         <Route path="proposal-form-list" element={<ProposalFormList />} />
         <Route path="dynamic-form" element={<DynamicForm />} />
+        <Route path="employee" element={<EmployeeForm />} />
         <Route
           path="users"
           element={<Users extraItem="test extra item from router" />}
