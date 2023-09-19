@@ -133,14 +133,15 @@ body {
   display: flex;
 }
 .sidebar {
-  width: 200px;
-  background-color: #fc6a03;
-  color: #ebf8fe;
+  width: 100px;
+  background-color: white;
+  color: black;
   padding-top: 200px;
   padding-left: 20px;
   height: 100vh;
 }
 .sidebar__items {
+  color: black;
   display: flex;
   flex-direction: column;
 }
@@ -167,7 +168,8 @@ body {
 
 .inner-content {
   padding-top: 70px;
-  padding-left: 40px;
+  padding-left: 140px;
+  padding-right: 100px;
 }
 
 h1 {

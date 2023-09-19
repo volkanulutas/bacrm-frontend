@@ -1,3 +1,15 @@
+import {
+  CompassOutlined,
+  DashboardOutlined,
+  FormOutlined,
+  HomeOutlined,
+  LayoutOutlined,
+  LineChartOutlined,
+  TableOutlined,
+  UserOutlined,
+  BlockOutlined,
+} from "@ant-design/icons";
+
 export const navigationItems = {
   sidebar: [
     {
