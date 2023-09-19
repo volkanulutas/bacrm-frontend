@@ -22,6 +22,7 @@ import ProposalFormList from "./components/proposal/ProposalFormList";
 import LeaveApproveForm from "./components/leave/LeaveApproveForm";
 import LeaveForm from "./components/leave/LeaveRequestForm";
 import EmployeeForm from "./EmployeeForm";
+import EmployeeEditForm from "./EmployeeEditForm";
 
 const MainRoutes = () => (
   <Routes>
@@ -48,6 +49,7 @@ const MainRoutes = () => (
         <Route path="proposal-form-list" element={<ProposalFormList />} />
         <Route path="dynamic-form" element={<DynamicForm />} />
         <Route path="employee" element={<EmployeeForm />} />
+        <Route path="employee-edit-form" element={<EmployeeEditForm />} />
         <Route
           path="users"
           element={<Users extraItem="test extra item from router" />}
