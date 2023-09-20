@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import "./styles.css";
+import "../../styles.css";
 import { PlusOutlined } from "@ant-design/icons";
 
 import {
@@ -34,7 +34,7 @@ interface Employee {
   nameSurname: string;
 }
 
-const EmployeeEditForm: React.FC = () => {
+const EmployeeDetailForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
@@ -180,4 +180,4 @@ const EmployeeEditForm: React.FC = () => {
     </>
   );
 };
-export default EmployeeEditForm;
+export default EmployeeDetailForm;

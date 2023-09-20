@@ -58,9 +58,12 @@ const items: MenuItem[] = [
   ]),
 
   getItem("Çalışanlar", "employee", <UserOutlined />, [
-    getItem("Çalışan Listesi", "employee"),
-    getItem("İşçilik", "timesheet"),
+    getItem("Çalışan Listesi", "employee-list"),
     getItem("Giriş Ekranı", "login-scren")
+  ]),
+  getItem("İşler", "work", <PieChartOutlined />, [
+    getItem("İş Listesi", "work-list"),
+    getItem("İşçilik", "timesheet"),
   ]),
 
   getItem("İzinler", "sub2", <AppstoreOutlined />, [

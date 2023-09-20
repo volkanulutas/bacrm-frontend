@@ -15,16 +15,12 @@ import { text } from "stream/consumers";
 
 interface DataType {
   key: string;
- employeeName:string;
- title: string;
- department: string;
- eMail:string;
- telephoneNumber: string;
- employmentDate:number;
-  
-  
-  
-  
+  employeeName:string;
+  title: string;
+  department: string;
+  eMail:string;
+  telephoneNumber: string;
+  employmentDate:number;
 }
 type DataIndex = keyof DataType;
 
@@ -54,7 +50,7 @@ export const getFullDate = (dateNum: number): string => {
   let date = new Date(dateNum);
   return date.toDateString();
 };
-const EmployeeForm = () => {
+const EmployeeListForm = () => {
   const navigation = useNavigate();
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -62,7 +58,7 @@ const EmployeeForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigateTo = () => {
-    navigation("/employee-edit-form");
+    navigation("/employee-detail");
   };
 
   const handleOk = () => {
@@ -170,7 +166,6 @@ const columns: ColumnsType<DataType> = [
       key: 'employeeName',
       width: '30%',
       ...getColumnSearchProps('employeeName'),
-
       sorter: (a,b) => a.employeeName.localeCompare(b.employeeName),
       sortDirections: ['descend', 'ascend'],
     },
@@ -179,7 +174,6 @@ const columns: ColumnsType<DataType> = [
       dataIndex: 'title',
       key: 'title',
       ...getColumnSearchProps('title'),
-     
       sorter: (a,b) => a.title.localeCompare(b.title),
       sortDirections: ['descend', 'ascend'],
     },
@@ -188,74 +182,48 @@ const columns: ColumnsType<DataType> = [
       dataIndex: 'department',
       key: 'department',
       ...getColumnSearchProps('department'),
-     
       sorter: (a,b) => a.department.localeCompare(b.department),
       sortDirections: ['descend', 'ascend'],
     },
 
 
     {
-      title: 'E posta',
+      title: 'E-Oosta',
       dataIndex: 'eMail',
       key: 'eMail',
       ...getColumnSearchProps('eMail'),
-     
     },
     {
       title: 'Telefon',
       dataIndex: 'telephoneNumber',
       key: 'telephoneNumber',
       ...getColumnSearchProps('telephoneNumber'),
-    
-     
     },
     {
       title: 'İşe Giriş Tarihi',
       dataIndex: 'employmentDate',
       key: 'employmentDate',
-      ...getColumnSearchProps('employmentDate'),//TODO: number a göre arıyor rander et
+      ...getColumnSearchProps('employmentDate'), //TODO: number a göre arıyor rander et
       render:((date:number) => getFullDate(date)),
       sorter: (a,b) => a.employmentDate-b.employmentDate,
       sortDirections: ['descend', 'ascend'],
     },
-
     {
       title: 'İşlem',
       dataIndex: 'action',
       render: (_, record: { key: React.Key }) =>
         data.length >= 1 ? (
           <div>
-             
-
- 
- <Button type="primary" shape="circle" onClick={navigateTo} icon={<QuestionCircleOutlined/>}></Button>
-
-
-
+            <Button type="primary" shape="circle" onClick={navigateTo} icon={<QuestionCircleOutlined/>}></Button>
           </div>
-         
         ) : null,
     },
-   
   ];
-
-
-
-
-
-
-
-
-
   return (
     <div>
       <h2>Çalışanlar</h2>
-
-<Table columns={columns} dataSource={data} />
-
-      
-   
+        <Table columns={columns} dataSource={data} />
     </div>
   );
 };
-export default EmployeeForm;
+export default EmployeeListForm;

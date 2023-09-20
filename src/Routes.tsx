@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import InnerContent from "./components/InnerContent";
 import Dashboard from "./components/Dashboard";
 import Tabs from "./components/Tabs";
-import Timesheet from "./components/Timesheet";
+import Timesheet from "./components/timesheet/Timesheet";
 import Login from "./components/Login";
 import Users from "./components/Users";
 import SingleUser from "./components/SingleUser";
@@ -21,9 +21,11 @@ import PermissionDenied from "./components/PermissionDenied";
 import ProposalFormList from "./components/proposal/ProposalFormList";
 import LeaveApproveForm from "./components/leave/LeaveApproveForm";
 import LeaveForm from "./components/leave/LeaveRequestForm";
-import EmployeeForm from "./EmployeeForm";
-import EmployeeEditForm from "./EmployeeEditForm";
+import EmployeeListForm from "./components/employee/EmployeeListForm";
+import EmployeeDetailForm from "./components/employee/EmployeeDetailForm";
 import LoginScren from "./LoginScren";
+import WorkListForm from "./components/work/WorkListForm";
+import WorkDetailForm from "./components/work/WorkDetailForm";
 
 const MainRoutes = () => (
   <Routes>
@@ -50,8 +52,10 @@ const MainRoutes = () => (
         <Route path="proposal-form-list" element={<ProposalFormList />} />
         <Route path="dynamic-form" element={<DynamicForm />} />
         <Route path="login-scren" element={<LoginScren />} />
-        <Route path="employee" element={<EmployeeForm />} />
-        <Route path="employee-edit-form" element={<EmployeeEditForm />} />
+        <Route path="employee-list" element={<EmployeeListForm />} />
+        <Route path="employee-detail" element={<EmployeeDetailForm />} />
+        <Route path="work-list" element={<WorkListForm />} />
+        <Route path="work-detail" element={<WorkDetailForm />} />
         <Route
           path="users"
           element={<Users extraItem="test extra item from router" />}
