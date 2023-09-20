@@ -14,6 +14,7 @@ import {
   Switch,
   TreeSelect,
   Upload,
+  Divider,
   Spin,
   Space,
 } from "antd";
@@ -34,8 +35,9 @@ const WorkDetailForm = () => {
   };
   return (
     <div>
-      <h2>İş Detayı</h2>
+
       <Spin spinning={loading}>
+      <Divider>İş Detayı</Divider>
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}

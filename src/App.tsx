@@ -54,7 +54,11 @@ const items: MenuItem[] = [
     getItem("Dynamic Form", "dynamic-form"),
     getItem("Users", "users"),
     getItem("Example", "example"),
-    getItem("Proposal Form", "proposal-form-list"),
+    getItem("Submenu", "sub3", null, [
+      getItem("Option 7", "7"),
+      getItem("Option 8", "8"),
+    ]),
+ 
   ]),
 
   getItem("Çalışanlar", "employee", <UserOutlined />, [
@@ -63,24 +67,16 @@ const items: MenuItem[] = [
   ]),
   getItem("İşler", "work", <PieChartOutlined />, [
     getItem("İş Listesi", "work-list"),
-    getItem("İşçilik", "timesheet"),
+    getItem("İşçilik Girişi", "timesheet"),
   ]),
 
-  getItem("İzinler", "sub2", <AppstoreOutlined />, [
+  getItem("İzinler", "leaves", <AppstoreOutlined />, [
     getItem("İzin Talep Formu", "leave-form"),
     getItem("İzin Onay Formu", "leave-approve-form"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 7", "7"),
-      getItem("Option 8", "8"),
-    ]),
+   
   ]),
-  getItem("Teklifler", "sub2", <AppstoreOutlined />, [
-    getItem("İzin Talep Formu", "leave-form"),
-    getItem("İzin Onay Formu", "leave-approve-form"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 7", "7"),
-      getItem("Option 8", "8"),
-    ]),
+  getItem("Teklifler", "proposal", <DesktopOutlined />, [
+    getItem("Teklif Listesi", "proposal-list-form"),
   ]),
 ];
 

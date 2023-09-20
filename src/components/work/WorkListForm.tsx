@@ -104,7 +104,7 @@ const WorkListForm = () => {
             width: "15%",
           },
           {
-            title: 'İşlem',
+            title: 'İşlemler',
             dataIndex: 'action',
             render: (_, record: { id: React.Key }) =>
               data.length >= 1 ? (
