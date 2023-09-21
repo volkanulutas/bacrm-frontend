@@ -36,7 +36,7 @@ const HeaderMenu = () => {
 
   const logout = () => {
     localStorage.removeItem("user");
-    navigation("/login");
+    navigation("/login-scree");
   };
 
   const changeTheme = (value: boolean) => {
