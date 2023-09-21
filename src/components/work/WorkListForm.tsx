@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Button, Form, Input, Popconfirm, Table, Space } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import Highlighter from 'react-highlight-words';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
+import { getAll } from "../../service/work.service";
 
 interface DataType {
     id: React.Key;
@@ -20,6 +21,7 @@ interface DataType {
 
   type DataIndex = keyof DataType;
 
+  /*
   const data: DataType[] = [
     {
       id: "1",
@@ -31,7 +33,8 @@ interface DataType {
       endDate: 1694979873986,
     }
   ];
-  
+  */
+ 
  
   export const getFullDate = (dateNum: number): string => {
     let date = new Date(dateNum);
@@ -41,6 +44,11 @@ interface DataType {
 
 const WorkListForm = () => {
     const navigation = useNavigate();
+    const [dataSource, setDataSource] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+      getData();
+    }, []);
     const columns: ColumnsType<DataType> = [
         {
             title: "No",
@@ -107,13 +115,24 @@ const WorkListForm = () => {
             title: 'İşlemler',
             dataIndex: 'action',
             render: (_, record: { id: React.Key }) =>
-              data.length >= 1 ? (
+                dataSource.length >= 1 ? (
                 <div>
                   <Button type="primary" shape="circle" onClick={navigateTo} icon={<QuestionCircleOutlined/>}></Button>
                 </div>
               ) : null,
           },
       ]
+
+      const getData = async () => {
+        await getAll().then(
+          res => {
+            setLoading(false);
+            setDataSource(
+              res.data
+            );
+          }
+        );
+      };
 
     const onChange: TableProps<DataType>["onChange"] = (
         pagination,
@@ -133,7 +152,7 @@ const WorkListForm = () => {
   return (
     <div>
       <h2>İş Listesi</h2>
-         <Table columns={columns} dataSource={data} onChange={onChange} />
+         <Table columns={columns} dataSource={dataSource} onChange={onChange} />
     </div>
   );
 };
