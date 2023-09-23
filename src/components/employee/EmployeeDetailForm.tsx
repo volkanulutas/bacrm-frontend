@@ -44,6 +44,7 @@ const EmployeeDetailForm: React.FC = () => {
   };
   const onFinish = (values: any) => {
     alert(values.nameSurname);
+    alert(JSON.stringify(values));
     // make api call
     setLoading(true);
     setTimeout(() => {

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainRoutes from "./Routes";
 import HeaderMenu from "./components/HeaderMenu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import * as AuthService from "./service/auth.service";
+import IUser from './types/user.type';
 import {
   Breadcrumb,
   Tooltip,
@@ -17,6 +19,7 @@ import {
 
 import {
   AppstoreOutlined,
+  LogoutOutlined,
   ContainerOutlined,
   DesktopOutlined,
   MailOutlined,
@@ -29,6 +32,7 @@ import {
 import type { MenuProps } from "antd";
 import "./styles.css";
 import InnerContent from "./components/InnerContent";
+import MenuItem from "antd/es/menu/MenuItem";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -43,43 +47,16 @@ function getItem(
     icon,
     children,
     label,
-    type,
+    type
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem("Dashboard", "sub1", <MailOutlined />, [
-    getItem("Dashboard", "dashboard"),
-    getItem("Tabs Demo", "tabs"),
-    getItem("Dynamic Form", "dynamic-form"),
-    getItem("Users", "users"),
-    getItem("Example", "example"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 7", "7"),
-      getItem("Option 8", "8"),
-    ]),
- 
-  ]),
 
-  getItem("Çalışanlar", "employee", <UserOutlined />, [
-    getItem("Çalışan Listesi", "employee-list"),
-    getItem("Giriş Ekranı", "login-scren")
-  ]),
-  getItem("İşler", "work", <PieChartOutlined />, [
-    getItem("İş Listesi", "work-list"),
-    getItem("İşçilik Girişi", "timesheet"),
-    getItem("İşçilik Onay Formu", "timesheet-approve-list-form"),
-  ]),
 
-  getItem("İzinler", "leaves", <AppstoreOutlined />, [
-    getItem("İzin Talep Formu", "leave-form"),
-    getItem("İzin Onay Formu", "leave-approve-form"),
-   
-  ]),
-  getItem("Teklifler", "proposal", <DesktopOutlined />, [
-    getItem("Teklif Listesi", "proposal-list-form"),
-  ]),
-];
+
+
+
+
 
 const contentStyle: React.CSSProperties = {
   textAlign: "center",
@@ -118,6 +95,49 @@ function App() {
   const [themeLcl, setThemeLcl] = useState<MenuTheme>("dark");
   const [current, setCurrent] = useState("1");
   const [collapsed, setCollapsed] = useState(false);
+  // role
+  const [showModeratorBoard, setShowModeratorBoard] = useState<boolean>(false);
+  const [showAdminBoard, setShowAdminBoard] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+
+  /*
+  useEffect( () => {
+    const user = AuthService.getCurrentUser();
+    setCurrentUser(user);
+    setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
+    setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+  })*/
+
+  const items: MenuItem[] = [
+
+
+    getItem("Çalışanlar", "employee", <UserOutlined />, [
+      getItem("Çalışan Listesi", "employee-list"),
+    ]),
+    getItem("İşler", "work", <PieChartOutlined />, [
+      getItem("İş Listesi", "work-list"),
+      getItem("İşçilik Girişi", "timesheet"),
+    ]),
+  
+    getItem("İzinler", "leaves", <AppstoreOutlined />, [
+      getItem("İzin Talep Formu", "leave-form"),
+      getItem("İzin Onay Formu", "leave-approve-form"),
+     
+    ]),
+    getItem("Teklifler", "proposal", <DesktopOutlined />, [
+      ( {showAdminBoard}? getItem("Teklif Listesi", "proposal-list-form") : null )
+    ])
+  ];
+
+
+  const logOut = () => {
+    AuthService.logout();
+    setShowModeratorBoard(false);
+    setShowAdminBoard(false);
+    setCurrentUser(undefined);
+  };
+
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -139,20 +159,33 @@ function App() {
         <Layout>
           <Header style={{ display: "flex", alignItems: "center" }}>
             <div>
-              <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+              <Menu theme="dark" mode="horizontal">
                 <Menu.Item>
                   <Image width={32} height={32} src="logo192.png"></Image>
                 </Menu.Item>
-                <Menu.Item key="login">
-                  <Tooltip title="Login">
+
+                {!currentUser ? (
+                    <Menu.Item key="login">
+                    <Tooltip title="Login">
+                      <Button
+                        type="link"
+                        shape="circle"
+                        icon={<LoginOutlined />}
+                        href="/login"
+                      />
+                    </Tooltip>
+                  </Menu.Item>
+                ): ( 
+                <Menu.Item key="logout">
+                  <Tooltip title="Çıkış Yap">
                     <Button
                       type="link"
                       shape="circle"
-                      icon={<LoginOutlined />}
-                      href="/login"
+                      icon={<LogoutOutlined />}
+                      href="/logout"
                     />
                   </Tooltip>
-                </Menu.Item>
+                </Menu.Item>)}
                 <Menu.Item>
                   <Switch
                     checked={themeLcl === "dark"}

@@ -22,7 +22,7 @@ const { TextArea } = Input;
 
 const WorkDetailForm = () => {
   const [loading, setLoading] = useState(false);
-  const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
+  const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
     alert(values.nameSurname);
@@ -35,9 +35,8 @@ const WorkDetailForm = () => {
   };
   return (
     <div>
-
       <Spin spinning={loading}>
-      <Divider>İş Detayı</Divider>
+        <Divider>İş Detayı</Divider>
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
@@ -47,55 +46,58 @@ const WorkDetailForm = () => {
           onFinish={onFinish}
           form={form}
         >
-          <Form.Item
-            label="No"
-            name={"id"}
-          >
-            <Input/>
+          <Form.Item label="No" name={"id"}>
+            <Input placeholder="No" disabled={true} />
           </Form.Item>
           <Form.Item
             label="İş Adı"
             name={"name"}
-            rules={[{ required: true, message: "İş Adını girmelisiniz." }]}
+            rules={[{ required: false, message: "İş Adını girmelisiniz." }]}
           >
             <Input placeholder="İş Adını giriniz." />
           </Form.Item>
           <Form.Item
             label="İş Açıklaması"
             name={"definition"}
-            rules={[{ required: false, message: "İş Açıklamasını girmelisiniz." }]}
+            rules={[
+              { required: false, message: "İş Açıklamasını girmelisiniz." },
+            ]}
           >
             <Input placeholder="İş Açıklamasını giriniz." />
           </Form.Item>
 
           <Form.Item
-            label="Durum"
-            name={"status"}
-            rules={[{ required: false, message: "Durum girmelisiniz." }]}
+            label="İş Süresi"
+            name={"workLoadHour"}
+            rules={[{ required: true, message: "Durum girmelisiniz." }]}
           >
-            <Input />
+            <Input placeholder="İş Süresini giriniz." />
           </Form.Item>
           <Form.Item
             label="Planlama Zamanı"
             name={"planningDate"}
-            rules={[{ required: false, message: "Planlama Zamanı girmelisiniz." }]}
+            rules={[
+              { required: true, message: "Planlama Zamanı girmelisiniz." },
+            ]}
           >
-               <DatePicker placeholder="Planlama zamanını giriniz." />
+            <DatePicker placeholder="Planlama zamanını giriniz." />
           </Form.Item>
           <Form.Item
             label="Başlangıç Zamanı"
             name={"startDate"}
-            rules={[{ required: false, message: "Başlangıç Zamanı girmelisiniz." }]}
+            rules={[
+              { required: true, message: "Başlangıç Zamanı girmelisiniz." },
+            ]}
           >
-               <DatePicker placeholder="Başlangıç zamanını giriniz." />
+            <DatePicker placeholder="Başlangıç zamanını giriniz." />
           </Form.Item>
 
           <Form.Item
             label="Bitiş Zamanı"
             name={"endDate"}
-            rules={[{ required: false, message: "Bitiş Zamanı girmelisiniz." }]}
+            rules={[{ required: true, message: "Bitiş Zamanı girmelisiniz." }]}
           >
-               <DatePicker placeholder="Bitiş zamanını giriniz." />
+            <DatePicker placeholder="Bitiş zamanını giriniz." />
           </Form.Item>
           <Space direction="horizontal" size={12}>
             <Button
@@ -110,7 +112,7 @@ const WorkDetailForm = () => {
               type="primary"
               style={{ marginBottom: 16 }}
             >
-              Reset
+              İptal
             </Button>
           </Space>
         </Form>
