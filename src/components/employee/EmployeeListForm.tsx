@@ -60,7 +60,7 @@ const EmployeeListForm = () => {
   const navigateTo = () => {
     navigation("/employee-detail");
   };
-
+  
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -222,6 +222,10 @@ const columns: ColumnsType<DataType> = [
   return (
     <div>
       <h2>Çalışanlar</h2>
+      <Button type="primary"  onClick={navigateTo}>
+        Yeni Çalışan Ekle
+      </Button>
+      
         <Table columns={columns} dataSource={data} />
     </div>
   );

@@ -68,6 +68,7 @@ const items: MenuItem[] = [
   getItem("İşler", "work", <PieChartOutlined />, [
     getItem("İş Listesi", "work-list"),
     getItem("İşçilik Girişi", "timesheet"),
+    getItem("İşçilik Onay Formu", "timesheet-approve-list-form"),
   ]),
 
   getItem("İzinler", "leaves", <AppstoreOutlined />, [

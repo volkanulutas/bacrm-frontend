@@ -5,6 +5,7 @@ import InnerContent from "./components/InnerContent";
 import Dashboard from "./components/Dashboard";
 import Tabs from "./components/Tabs";
 import Timesheet from "./components/timesheet/Timesheet";
+import TimesheetApproveListForm from "./components/timesheet/TimesheetApproveListForm";
 import Login from "./components/Login";
 import Users from "./components/Users";
 import SingleUser from "./components/SingleUser";
@@ -48,6 +49,7 @@ const MainRoutes = () => (
           <Route path="tab3" element={<Tab3 />} />
         </Route>
         <Route path="timesheet" element={<Timesheet />} />
+        <Route path="timesheet-approve-list-form" element={<TimesheetApproveListForm />} />
         <Route path="leave-form" element={<LeaveForm />} />
         <Route path="leave-approve-form" element={<LeaveApproveForm />} />
         <Route path="proposal-list-form" element={<ProposalFormList />} />
