@@ -25,7 +25,7 @@ const [loading, setLoading] = useState(false);
 const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
 const [form] = Form.useForm();
   const onFinish = (values: any) => {
-    alert(values.nameSurname);
+
     // make api call
     setLoading(true);
     setTimeout(() => {

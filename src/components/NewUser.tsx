@@ -42,8 +42,6 @@ const NewUser = () => {
 		console.log("new user data", newUserData)
 
 		//post request for API
-
-		alert("Data posted successfully")
 	}
 
 	return (

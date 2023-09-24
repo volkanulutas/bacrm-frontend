@@ -18,21 +18,33 @@ import {
   Spin,
   Space,
 } from "antd";
+import { createWork } from "../../service/work.service";
 const { TextArea } = Input;
+
+
 
 const WorkDetailForm = () => {
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
   const onFinish = (values: any) => {
-    alert(values.nameSurname);
+   
+
+
+    createWork(values).then((res) => {
+     
+      setLoading(true);
+      setTimeout(() => {
+        form.resetFields();
+        setLoading(false);
+      }, 500);
+    });
+    
     // make api call
-    setLoading(true);
-    setTimeout(() => {
-      form.resetFields();
-      setLoading(false);
-    }, 500);
+  
+   
   };
+
   return (
     <div>
       <Spin spinning={loading}>
@@ -52,7 +64,7 @@ const WorkDetailForm = () => {
           <Form.Item
             label="İş Adı"
             name={"name"}
-            rules={[{ required: false, message: "İş Adını girmelisiniz." }]}
+            rules={[{ required: true, message: "İş Adını girmelisiniz." }]}
           >
             <Input placeholder="İş Adını giriniz." />
           </Form.Item>
@@ -104,6 +116,7 @@ const WorkDetailForm = () => {
               htmlType="submit"
               type="primary"
               style={{ marginBottom: 16 }}
+              
             >
               Kaydet
             </Button>

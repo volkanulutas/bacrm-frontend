@@ -121,7 +121,7 @@ const WorkListForm = () => {
 
   const getData = async () => {
     await getAll().then((res) => {
-      alert(JSON.stringify(res.data));
+     
       setLoading(false);
       setDataSource(res.data);
     });
@@ -143,8 +143,13 @@ const WorkListForm = () => {
   // TODO: table filter, sorter ekle
   return (
     <div>
+     
       <h2>İş Listesi</h2>
+      <Button type="primary"  onClick={navigateTo}>
+        Yeni İş Ekle
+      </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
+      
     </div>
   );
 };
