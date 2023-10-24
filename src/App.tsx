@@ -51,13 +51,6 @@ function getItem(
   } as MenuItem;
 }
 
-
-
-
-
-
-
-
 const contentStyle: React.CSSProperties = {
   textAlign: "center",
   minHeight: 120,

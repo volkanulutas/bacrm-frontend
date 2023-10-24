@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Button, Form, Input, Popconfirm, Table, Space } from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button, Table } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
-import type { FilterConfirmProps } from "antd/es/table/interface";
-import { SearchOutlined } from "@ant-design/icons";
-import type { InputRef } from "antd";
 import { getAll } from "../../service/work.service";
-import { json } from "stream/consumers";
 
 interface DataType {
   id: React.Key;
@@ -25,8 +18,6 @@ interface DataType {
 }
 
 type DataIndex = keyof DataType;
-
-
 
 export const getFullDate = (dateNum: number): string => {
   let date = new Date(dateNum);
@@ -111,7 +102,8 @@ const WorkListForm = () => {
             <Button
               type="primary"
               shape="circle"
-              onClick={navigateTo}
+              onClick={() => navigateTo(record.id)}
+
               icon={<QuestionCircleOutlined />}
             ></Button>
           </div>
@@ -127,6 +119,7 @@ const WorkListForm = () => {
     });
   };
 
+
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -136,8 +129,8 @@ const WorkListForm = () => {
     console.log("params", pagination, filters, sorter, extra);
   };
 
-  const navigateTo = () => {
-    navigation("/work-detail");
+  const navigateTo = (id: React.Key) => {
+    navigation(`/work-detail/${id}`);
   };
 
   // TODO: table filter, sorter ekle
@@ -145,7 +138,7 @@ const WorkListForm = () => {
     <div>
      
       <h2>İş Listesi</h2>
-      <Button type="primary"  onClick={navigateTo}>
+      <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni İş Ekle
       </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />

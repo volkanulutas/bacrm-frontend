@@ -58,7 +58,7 @@ const MainRoutes = () => (
         <Route path="employee-list" element={<EmployeeListForm />} />
         <Route path="employee-detail" element={<EmployeeDetailForm />} />
         <Route path="work-list" element={<WorkListForm />} />
-        <Route path="work-detail" element={<WorkDetailForm />} />
+        <Route path="work-detail/:id" element={<WorkDetailForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route

@@ -13,3 +13,9 @@ export const getAll = () => {
 export const createWork = (data:any) => {
   return axios.post(API_URL, data, { headers: authHeader() });
 };
+
+export const getWorkById = (id:string) => {
+
+  // alert(API_URL + id)
+  return axios.get(API_URL + id , { headers: authHeader() });
+};

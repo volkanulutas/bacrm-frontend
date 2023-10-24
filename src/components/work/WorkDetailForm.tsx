@@ -1,5 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import {Routes, Route, useNavigate} from 'react-router-dom';
 import { PlusOutlined } from "@ant-design/icons";
+import { useParams } from 'react-router-dom';
 import {
   Button,
   Cascader,
@@ -7,7 +9,6 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   Radio,
   Select,
   Slider,
@@ -15,34 +16,63 @@ import {
   TreeSelect,
   Upload,
   Divider,
+  InputNumber,
   Spin,
   Space,
 } from "antd";
 import { createWork } from "../../service/work.service";
+import { getWorkById } from "../../service/work.service";
 const { TextArea } = Input;
 
+export const getMillisDate = (dateStr: string): number => {
+  let date = new Date(dateStr);
+  return date.getTime();
+};
 
 
 const WorkDetailForm = () => {
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const { id } = useParams();
+   //alert( {id}.id )
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    getData({id}.id + "");
+  }, []);
+
+  
+  const getData = async (id:string) => {
+    await getWorkById(id).then((res) => {
+      alert(JSON.stringify(res.data))
+      setLoading(false);
+      setData(res.data);
+    });
+  };
+
+
   const onFinish = (values: any) => {
-   
+    const data = {
+      "definition": values.definition,
+      "endDate": getMillisDate(values.endDate),
+      "name": values.name,
+      "planningDate": getMillisDate(values.planningDate),
+      "startDate": getMillisDate(values.startDate),
+      "workloadHour": values.workLoadHour,
+    };
 
-
-    createWork(values).then((res) => {
-     
+    createWork(data).then((res) => {
       setLoading(true);
       setTimeout(() => {
         form.resetFields();
         setLoading(false);
+        navigate('/work-list', {replace: true});
       }, 500);
     });
-    
-    // make api call
   
-   
   };
 
   return (
@@ -79,11 +109,11 @@ const WorkDetailForm = () => {
           </Form.Item>
 
           <Form.Item
-            label="İş Süresi"
+            label="İş Süresi (saat)"
             name={"workLoadHour"}
-            rules={[{ required: true, message: "Durum girmelisiniz." }]}
+            rules={[{ required: true, message: "İş Süresini girmelisiniz." }]}
           >
-            <Input placeholder="İş Süresini giriniz." />
+            <InputNumber placeholder="İş Süresini giriniz." min={0} step={0.5} />
           </Form.Item>
           <Form.Item
             label="Planlama Zamanı"
