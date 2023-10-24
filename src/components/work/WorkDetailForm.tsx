@@ -1,20 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import moment from "moment";
+
 import {
   Button,
-  Cascader,
-  Checkbox,
   DatePicker,
   Form,
   Input,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
   Divider,
   InputNumber,
   Spin,
@@ -24,11 +18,25 @@ import { createWork } from "../../service/work.service";
 import { getWorkById } from "../../service/work.service";
 const { TextArea } = Input;
 
+interface Work {
+  id: string;
+  name: string;
+  definition: string;
+  workloadHour: number;
+  endDate: number;
+  startDate: number;
+  planningDate: number;
+}
+
 export const getMillisDate = (dateStr: string): number => {
   let date = new Date(dateStr);
   return date.getTime();
 };
 
+export const getFullDate = (dateNum: number): string => {
+  let date = new Date(dateNum);
+  return date.toDateString();
+};
 
 const WorkDetailForm = () => {
   const [loading, setLoading] = useState(false);
@@ -36,32 +44,47 @@ const WorkDetailForm = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { id } = useParams();
-   //alert( {id}.id )
 
-  const [data, setData] = useState({});
+  const [item, setItem] = useState<Work>();
 
   useEffect(() => {
-    getData({id}.id + "");
-  }, []);
+    getData({ id }.id + "").then((res) => {});
 
-  
-  const getData = async (id:string) => {
+    if (item) {
+    }
+  }, [id, form]);
+
+  const getData = async (id: string) => {
+    setLoading(true);
     await getWorkById(id).then((res) => {
-      alert(JSON.stringify(res.data))
+      alert(JSON.stringify(res.data));
       setLoading(false);
-      setData(res.data);
+      const data = res.data;
+      setItem(data);
+      alert(data.endDate);
+      const dd = moment(data.endDate);
+      alert("dd: " + dd);
+      form.setFieldsValue({
+        id: data.id,
+        name: data.name,
+        definition: data.definition,
+        workloadHour: data.workloadHour,
+        endDate: moment(data.endDate),
+        startDate: moment(data.startDate),
+        planningDate: moment(data.planningDate),
+      });
     });
   };
 
-
   const onFinish = (values: any) => {
     const data = {
-      "definition": values.definition,
-      "endDate": getMillisDate(values.endDate),
-      "name": values.name,
-      "planningDate": getMillisDate(values.planningDate),
-      "startDate": getMillisDate(values.startDate),
-      "workloadHour": values.workLoadHour,
+      id: values.id,
+      definition: values.definition,
+      endDate: getMillisDate(values.endDate),
+      name: values.name,
+      planningDate: getMillisDate(values.planningDate),
+      startDate: getMillisDate(values.startDate),
+      workloadHour: values.workLoadHour,
     };
 
     createWork(data).then((res) => {
@@ -69,10 +92,9 @@ const WorkDetailForm = () => {
       setTimeout(() => {
         form.resetFields();
         setLoading(false);
-        navigate('/work-list', {replace: true});
+        navigate("/work-list", { replace: true });
       }, 500);
     });
-  
   };
 
   return (
@@ -83,6 +105,7 @@ const WorkDetailForm = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
+          initialValues={{ id: item?.id }}
           disabled={componentDisabled}
           style={{ maxWidth: 600 }}
           onFinish={onFinish}
@@ -94,9 +117,10 @@ const WorkDetailForm = () => {
           <Form.Item
             label="İş Adı"
             name={"name"}
+            initialValue={"item.name"}
             rules={[{ required: true, message: "İş Adını girmelisiniz." }]}
           >
-            <Input placeholder="İş Adını giriniz." />
+            <Input placeholder="İş Adı" />
           </Form.Item>
           <Form.Item
             label="İş Açıklaması"
@@ -105,15 +129,15 @@ const WorkDetailForm = () => {
               { required: false, message: "İş Açıklamasını girmelisiniz." },
             ]}
           >
-            <Input placeholder="İş Açıklamasını giriniz." />
+            <Input placeholder="İş Açıklaması" />
           </Form.Item>
 
           <Form.Item
             label="İş Süresi (saat)"
-            name={"workLoadHour"}
+            name={"workloadHour"}
             rules={[{ required: true, message: "İş Süresini girmelisiniz." }]}
           >
-            <InputNumber placeholder="İş Süresini giriniz." min={0} step={0.5} />
+            <InputNumber placeholder="İş Süresi" min={0} step={0.5} />
           </Form.Item>
           <Form.Item
             label="Planlama Zamanı"
@@ -122,7 +146,7 @@ const WorkDetailForm = () => {
               { required: true, message: "Planlama Zamanı girmelisiniz." },
             ]}
           >
-            <DatePicker placeholder="Planlama zamanını giriniz." />
+            <DatePicker placeholder="Planlama Zamanı" />
           </Form.Item>
           <Form.Item
             label="Başlangıç Zamanı"
@@ -131,7 +155,7 @@ const WorkDetailForm = () => {
               { required: true, message: "Başlangıç Zamanı girmelisiniz." },
             ]}
           >
-            <DatePicker placeholder="Başlangıç zamanını giriniz." />
+            <DatePicker placeholder="Başlangıç Zamanı" />
           </Form.Item>
 
           <Form.Item
@@ -139,14 +163,13 @@ const WorkDetailForm = () => {
             name={"endDate"}
             rules={[{ required: true, message: "Bitiş Zamanı girmelisiniz." }]}
           >
-            <DatePicker placeholder="Bitiş zamanını giriniz." />
+            <DatePicker placeholder="Bitiş Zamanı" />
           </Form.Item>
           <Space direction="horizontal" size={12}>
             <Button
               htmlType="submit"
               type="primary"
               style={{ marginBottom: 16 }}
-              
             >
               Kaydet
             </Button>
