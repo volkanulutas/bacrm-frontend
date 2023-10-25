@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
+import { getAllCustomer } from "../../service/customer.service";
 
 interface Customer {
   id: React.Key;
@@ -26,7 +27,7 @@ const CustomerListForm = () => {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    //getData();
+    getData();
   }, []);
   const columns: ColumnsType<Customer> = [
     {
@@ -82,7 +83,6 @@ const CustomerListForm = () => {
               type="primary"
               shape="circle"
               onClick={() => navigateTo(record.id)}
-
               icon={<QuestionCircleOutlined />}
             ></Button>
           </div>
@@ -91,6 +91,13 @@ const CustomerListForm = () => {
   ];
 
 
+  const getData = async () => {
+    await getAllCustomer().then((res) => {
+     
+      setLoading(false);
+      setDataSource(res.data);
+    });
+  };
 
   const onChange: TableProps<Customer>["onChange"] = (
     pagination,

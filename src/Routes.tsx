@@ -30,6 +30,7 @@ import WorkListForm from "./components/work/WorkListForm";
 import WorkDetailForm from "./components/work/WorkDetailForm";
 
 import CustomerListForm from "./components/customer/CustomerListForm";
+import CustomerDetailForm  from "./components/customer/CustomerDetailForm";
 
 const MainRoutes = () => (
   <Routes>
@@ -62,6 +63,7 @@ const MainRoutes = () => (
         <Route path="work-list" element={<WorkListForm />} />
         <Route path="work-detail/:id" element={<WorkDetailForm />} />
         <Route path="customer-list" element={<CustomerListForm />} />
+        <Route path="customer-detail/:id" element={<CustomerDetailForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route

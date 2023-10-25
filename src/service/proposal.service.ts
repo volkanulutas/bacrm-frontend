@@ -9,6 +9,5 @@ export const getAll = () => {
 };
 
 export const getProposalById = (id:string) => {
-  alert(API_URL+id)
     return axios.get(API_URL + id , { headers: authHeader() });
   };
