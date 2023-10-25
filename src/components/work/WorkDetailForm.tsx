@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
@@ -39,31 +38,24 @@ export const getFullDate = (dateNum: number): string => {
 };
 
 const WorkDetailForm = () => {
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { id } = useParams();
-
   const [item, setItem] = useState<Work>();
 
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
-
-    if (item) {
-    }
   }, [id, form]);
 
   const getData = async (id: string) => {
+    if(id === "-1"){return;}
     setLoading(true);
     await getWorkById(id).then((res) => {
-      alert(JSON.stringify(res.data));
       setLoading(false);
       const data = res.data;
       setItem(data);
-      alert(data.endDate);
-      const dd = moment(data.endDate);
-      alert("dd: " + dd);
       form.setFieldsValue({
         id: data.id,
         name: data.name,
@@ -105,7 +97,6 @@ const WorkDetailForm = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
-          initialValues={{ id: item?.id }}
           disabled={componentDisabled}
           style={{ maxWidth: 600 }}
           onFinish={onFinish}
@@ -117,7 +108,6 @@ const WorkDetailForm = () => {
           <Form.Item
             label="İş Adı"
             name={"name"}
-            initialValue={"item.name"}
             rules={[{ required: true, message: "İş Adını girmelisiniz." }]}
           >
             <Input placeholder="İş Adı" />

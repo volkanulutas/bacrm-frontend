@@ -5,33 +5,24 @@ import type { FormInstance } from "antd/es/form";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {CheckCircleOutlined,CloseCircleOutlined,QuestionCircleOutlined} from'@ant-design/icons';
+import { getAll } from "../../service/proposal.service";
 
-interface DataType {
+interface Customer {
+  id: string;
+  name: string;
+  definition: string;
+  address: string;
+  telephone: string;
+}
+interface Proposal {
   id: React.Key;
   proposalId: string;
-  customerName: string;
-  definition: string,
-  date: string;
+  definition: string;
+  date: number,
+  customer: Customer;
 }
 
-const data: DataType[] = [
-  {
-    id: "1",
-    proposalId: "BA-001",
-    definition: "Açıklama 1",
-    customerName: "Arel Üniversitesi Satın Alma Birimi",
-    date: new Date(1694804073100).toLocaleDateString(),
-  },
-  {
-    id: "2",
-    proposalId: "BA-002",
-    definition: "Açıklama 2",
-    customerName: "Medical Park",
-    date: new Date(1694804073100).toLocaleDateString(),
-  },
-];
-
-const onChange: TableProps<DataType>["onChange"] = (
+const onChange: TableProps<Proposal>["onChange"] = (
   pagination,
   filters,
   sorter,
@@ -42,8 +33,12 @@ const onChange: TableProps<DataType>["onChange"] = (
 
 const ProposalListForm = () => {
   const navigation = useNavigate();
-
-  const columns: ColumnsType<DataType> = [
+  const [dataSource, setDataSource] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getData();
+  }, []);
+  const columns: ColumnsType<Proposal> = [
     {
       title: "Teklif No:",
       dataIndex: "proposalId",
@@ -64,6 +59,9 @@ const ProposalListForm = () => {
     {
       title: "Müşteri Adı",
       dataIndex: "customerName",
+      render: (text, record) => {
+        return record.customer.name;
+      },
       filters: [
         {
           text: "Arel Üniversite Satın Alma Birimi",
@@ -80,7 +78,7 @@ const ProposalListForm = () => {
       ],
       filterMode: "tree",
       filterSearch: true,
-      onFilter: (value: any, record) => record.customerName.startsWith(value),
+      onFilter: (value: any, record) => record.customer.name.startsWith(value),
       width: "30%",
     },
     {
@@ -102,7 +100,7 @@ const ProposalListForm = () => {
       ],
       filterMode: "tree",
       filterSearch: true,
-      onFilter: (value: any, record) => record.customerName.startsWith(value),
+      onFilter: (value: any, record) => record.customer.name.startsWith(value),
       width: "30%",
     },
     {
@@ -115,20 +113,31 @@ const ProposalListForm = () => {
       title: 'İşlemler',
       dataIndex: 'action',
       render: (_, record: { id: React.Key }) =>
-        data.length >= 1 ? (
+        dataSource.length >= 1 ? (
           <div>
-            <Button type="primary" shape="circle" onClick={navigateTo} icon={<QuestionCircleOutlined/>}></Button>
+            <Button type="primary" shape="circle" onClick={() => navigateTo(record.id)} icon={<QuestionCircleOutlined/>}></Button>
           </div>
         ) : null,
     },
   ];
-   
-const navigateTo = () => {
-  navigation("/proposal-detail-form");
+
+  const getData = async () => {
+    await getAll().then((res) => {
+      alert(JSON.stringify(res.data))
+      setLoading(false);
+      setDataSource(res.data);
+    });
+  };
+const navigateTo = (id: React.Key) => {
+  navigation(`/proposal-detail-form/${id}`);
 };
   return(
     <div>
-      <Table columns={columns} dataSource={data} onChange={onChange} />
+       <h2>Teklif Listesi</h2>
+      <Button type="primary" onClick={() => navigateTo(-1)}>
+        Yeni Teklif Ekle
+      </Button>
+      <Table columns={columns} dataSource={dataSource} onChange={onChange} />
     </div>
   );
 

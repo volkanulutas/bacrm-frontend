@@ -5,7 +5,6 @@ import authUserId from "./auth-user-id";
 const API_URL = "http://localhost:8080/api/work/";
 
 export const getAll = () => {
-
   return axios.get(API_URL, { headers: authHeader() });
 };
 
@@ -15,7 +14,5 @@ export const createWork = (data:any) => {
 };
 
 export const getWorkById = (id:string) => {
-
-  // alert(API_URL + id)
   return axios.get(API_URL + id , { headers: authHeader() });
 };
