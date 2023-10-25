@@ -29,6 +29,8 @@ import EmployeeDetailForm from "./components/employee/EmployeeDetailForm";
 import WorkListForm from "./components/work/WorkListForm";
 import WorkDetailForm from "./components/work/WorkDetailForm";
 
+import CustomerListForm from "./components/customer/CustomerListForm";
+
 const MainRoutes = () => (
   <Routes>
     {/** Protected Routes */}
@@ -59,6 +61,7 @@ const MainRoutes = () => (
         <Route path="employee-detail" element={<EmployeeDetailForm />} />
         <Route path="work-list" element={<WorkListForm />} />
         <Route path="work-detail/:id" element={<WorkDetailForm />} />
+        <Route path="customer-list" element={<CustomerListForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route

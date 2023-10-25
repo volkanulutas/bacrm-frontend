@@ -5,33 +5,30 @@ import { useNavigate } from "react-router-dom";
 import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { getAll } from "../../service/work.service";
 
-interface Work {
+interface Customer {
   id: React.Key;
   name: string;
   definition: string;
-  workloadHour: number;
-  planningDate: number;
-  startDate: number;
-  endDate: number;
+  address: string;
+  telephone: string;
 }
 
-type DataIndex = keyof Work;
+type DataIndex = keyof Customer;
 
 export const getFullDate = (dateNum: number): string => {
   let date = new Date(dateNum);
   return date.toDateString();
 };
 
-const WorkListForm = () => {
+const CustomerListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getData();
+    //getData();
   }, []);
-  const columns: ColumnsType<Work> = [
+  const columns: ColumnsType<Customer> = [
     {
       title: "No",
       dataIndex: "id",
@@ -40,7 +37,7 @@ const WorkListForm = () => {
     },
 
     {
-      title: "İş Adı",
+      title: "Müşteri Adı",
       dataIndex: "name",
       filterSearch: true,
       width: "10%",
@@ -58,40 +55,22 @@ const WorkListForm = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "İş Süresi",
-      dataIndex: "workloadHour",
+      title: "Adres",
+      dataIndex: "address",
       filterSearch: true,
-      width: "10%",
-      // TODO:    ...getColumnSearchProps('status'),
-      sorter: (a, b) => a.workloadHour - b.workloadHour,
+      width: "25%",
+      // TODO:    ...getColumnSearchProps('definition'),
+      sorter: (a, b) => a.definition.localeCompare(b.definition),
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Planlama Zamanı",
-      dataIndex: "planningDate",
+      title: "Telefon",
+      dataIndex: "telephone",
       filterSearch: true,
-      // TODO:    ...getColumnSearchProps('planningDate'),
-      render: (date: number) => getFullDate(date),
-      sorter: (a, b) => a.planningDate - b.planningDate,
-      width: "15%",
-    },
-    {
-      title: "Başlama Zamanı",
-      dataIndex: "startDate",
-      render: (date: number) => getFullDate(date),
-      // TODO:    ...getColumnSearchProps('startDate'),
-      sorter: (a, b) => a.startDate - b.startDate,
-      filterSearch: true,
-      width: "15%",
-    },
-    {
-      title: "Bitiş Zamanı",
-      dataIndex: "endDate",
-      render: (date: number) => getFullDate(date),
-      sorter: (a, b) => a.endDate - b.endDate,
-      // TODO:    ...getColumnSearchProps('endDate'),
-      filterSearch: true,
-      width: "15%",
+      width: "25%",
+      // TODO:    ...getColumnSearchProps('definition'),
+      sorter: (a, b) => a.definition.localeCompare(b.definition),
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "İşlemler",
@@ -111,16 +90,9 @@ const WorkListForm = () => {
     },
   ];
 
-  const getData = async () => {
-    await getAll().then((res) => {
-     
-      setLoading(false);
-      setDataSource(res.data);
-    });
-  };
 
 
-  const onChange: TableProps<Work>["onChange"] = (
+  const onChange: TableProps<Customer>["onChange"] = (
     pagination,
     filters,
     sorter,
@@ -130,20 +102,20 @@ const WorkListForm = () => {
   };
 
   const navigateTo = (id: React.Key) => {
-    navigation(`/work-detail/${id}`);
+    navigation(`/customer-detail/${id}`);
   };
 
   // TODO: table filter, sorter ekle
   return (
     <div>
      
-      <h2>İş Listesi</h2>
+      <h2>Müşteri Listesi</h2>
       <Button type="primary" onClick={() => navigateTo(-1)}>
-        Yeni İş Ekle
+        Yeni Müşteri Ekle
       </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
       
     </div>
   );
 };
-export default WorkListForm;
+export default CustomerListForm;
