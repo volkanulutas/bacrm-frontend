@@ -1,20 +1,17 @@
-import React, { useRef, useState } from "react";
-import {Divider,Table,Space,Button,Popconfirm, Input,Modal } from 'antd';
-
-import {CheckCircleOutlined,CloseCircleOutlined,QuestionCircleOutlined} from'@ant-design/icons';
-
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useRef, useState, useEffect } from "react";
+import {Table,Space,Button, Input } from 'antd';
+import {QuestionCircleOutlined} from'@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 import { SearchOutlined } from '@ant-design/icons';
-
 import Highlighter from 'react-highlight-words';
 import type { InputRef } from 'antd';
-
 import type { ColumnType, ColumnsType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
-import { text } from "stream/consumers";
 
-interface DataType {
-  key: string;
+import { getAll } from "../../service/employee.service";
+
+interface Employee {
+  id: React.Key;
   employeeName:string;
   title: string;
   department: string;
@@ -22,30 +19,8 @@ interface DataType {
   telephoneNumber: string;
   employmentDate:number;
 }
-type DataIndex = keyof DataType;
+type DataIndex = keyof Employee;
 
-const data: DataType[] = [
-  {
-    key: '1',
-    employeeName: 'Derya Taş',
-    title:'diyetisyen',
-    department: 'ik',
-    eMail:'dryts',
-    telephoneNumber:'0545',
-    employmentDate:1694979873986,
-  },
-  {
-    key: '2',
-    employeeName: 'Volkan Ulutaş',
-    title:'Software',
-    department: 'Yönetim',
-    eMail:'volk',
-    telephoneNumber:'0545',
-    employmentDate:1695145889625,
-  },
-
-  
-];
 export const getFullDate = (dateNum: number): string => {
   let date = new Date(dateNum);
   return date.toDateString();
@@ -53,12 +28,27 @@ export const getFullDate = (dateNum: number): string => {
 const EmployeeListForm = () => {
   const navigation = useNavigate();
   const [searchText, setSearchText] = useState('');
+  const [dataSource, setDataSource] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    getData();
+  }, []);
 
-  const navigateTo = () => {
-    navigation("/employee-detail");
+  
+  const getData = async () => {
+    await getAll().then((res) => {
+      setLoading(false);
+      alert(JSON.stringify(res.data))
+      setDataSource(res.data);
+    });
+  };
+
+  const navigateTo = (id: React.Key) => {
+    navigation(`/employee-detail/${id}`);
   };
   
   const handleOk = () => {
@@ -82,7 +72,7 @@ const EmployeeListForm = () => {
     clearFilters();
     setSearchText('');
   };
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
+  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<Employee> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -159,7 +149,13 @@ const EmployeeListForm = () => {
       ),
   });
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<Employee> = [
+    {
+      title: "No",
+      dataIndex: "id",
+      filterSearch: true,
+      width: "5%",
+    },
     {
       title: 'Çalışan Adı',
       dataIndex: 'employeeName',
@@ -188,7 +184,7 @@ const columns: ColumnsType<DataType> = [
 
 
     {
-      title: 'E-Oosta',
+      title: 'E-Posta',
       dataIndex: 'eMail',
       key: 'eMail',
       ...getColumnSearchProps('eMail'),
@@ -209,12 +205,18 @@ const columns: ColumnsType<DataType> = [
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'İşlem',
-      dataIndex: 'action',
-      render: (_, record: { key: React.Key }) =>
-        data.length >= 1 ? (
+      title: "İşlemler",
+      dataIndex: "action",
+      render: (_, record: { id: React.Key }) =>
+        dataSource.length >= 1 ? (
           <div>
-            <Button type="primary" shape="circle" onClick={navigateTo} icon={<QuestionCircleOutlined/>}></Button>
+            <Button
+              type="primary" 
+              shape="circle"
+              onClick={() => navigateTo(record.id)}
+
+              icon={<QuestionCircleOutlined />}
+            ></Button>
           </div>
         ) : null,
     },
@@ -222,11 +224,11 @@ const columns: ColumnsType<DataType> = [
   return (
     <div>
       <h2>Çalışanlar</h2>
-      <Button type="primary"  onClick={navigateTo}>
+      <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni Çalışan Ekle
       </Button>
       
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={dataSource} />
     </div>
   );
 };

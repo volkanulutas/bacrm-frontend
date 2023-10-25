@@ -1,13 +1,12 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 import authUserId from "./auth-user-id";
-
-const API_URL = "http://localhost:8080/api/proposal/";
+import { API_BASE_URL, API_URL_PROPOSAL } from "../constants";
 
 export const getAll = () => {
-  return axios.get(API_URL, { headers: authHeader() });
+  return axios.get(API_BASE_URL + API_URL_PROPOSAL, { headers: authHeader() });
 };
 
 export const getProposalById = (id:string) => {
-    return axios.get(API_URL + id , { headers: authHeader() });
+    return axios.get(API_BASE_URL + API_URL_PROPOSAL + id , { headers: authHeader() });
   };

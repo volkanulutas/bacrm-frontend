@@ -2,12 +2,14 @@ import React, { useRef, useState } from "react";
 
 import "../../styles.css";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router-dom";
+import { getEmployeeById } from "../../service/employee.service";
 
 import {
   Button,
   Checkbox,
   DatePicker,
-  Form,
+  Form, 
   Input,
   InputNumber,
   Select,
@@ -29,7 +31,8 @@ interface Employee {
   nameSurname: string;
 }
 
-const EmployeeDetailForm: React.FC = () => {
+const EmployeeDetailForm = () => {
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();

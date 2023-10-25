@@ -100,7 +100,7 @@ const WorkListForm = () => {
         dataSource.length >= 1 ? (
           <div>
             <Button
-              type="primary"
+              type="primary" 
               shape="circle"
               onClick={() => navigateTo(record.id)}
 
@@ -113,7 +113,6 @@ const WorkListForm = () => {
 
   const getData = async () => {
     await getAll().then((res) => {
-     
       setLoading(false);
       setDataSource(res.data);
     });
