@@ -118,7 +118,7 @@ function App() {
      
     ]),
     getItem("Teklifler", "proposal", <DesktopOutlined />, [
-      ( {showAdminBoard}? getItem("Teklif Listesi", "proposal-list-form") : null ),
+      ( {showAdminBoard}? getItem("Teklif Listesi", "proposal-list") : null ),
       getItem("Müşteriler", "customer-list"),
     ])
   ];

@@ -55,11 +55,11 @@ const MainRoutes = () => (
         <Route path="timesheet-approve-list-form" element={<TimesheetApproveListForm />} />
         <Route path="leave-form" element={<LeaveForm />} />
         <Route path="leave-approve-form" element={<LeaveApproveForm />} />
-        <Route path="proposal-list-form" element={<ProposalFormList />} />
-        <Route path="proposal-detail-form/:id" element={<ProposalDetailForm />} />
+        <Route path="proposal-list" element={<ProposalFormList />} />
+        <Route path="proposal-detail/:id" element={<ProposalDetailForm />} />
         <Route path="dynamic-form" element={<DynamicForm />} />
         <Route path="employee-list" element={<EmployeeListForm />} />
-        <Route path="employee-detail" element={<EmployeeDetailForm />} />
+        <Route path="employee-detail/:id" element={<EmployeeDetailForm />} />
         <Route path="work-list" element={<WorkListForm />} />
         <Route path="work-detail/:id" element={<WorkDetailForm />} />
         <Route path="customer-list" element={<CustomerListForm />} />

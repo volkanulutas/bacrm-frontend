@@ -97,7 +97,7 @@ const WorkDetailForm = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
-          disabled={componentDisabled}
+          // disabled={componentDisabled}
           style={{ maxWidth: 600 }}
           onFinish={onFinish}
           form={form}

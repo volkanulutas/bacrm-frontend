@@ -5,17 +5,12 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import {
   Button,
-  Cascader,
   Checkbox,
   DatePicker,
   Form,
   Input,
   InputNumber,
-  Radio,
   Select,
-  Slider,
-  Switch,
-  TreeSelect,
   Upload,
   Spin,
   Space,
@@ -55,6 +50,7 @@ const EmployeeDetailForm: React.FC = () => {
 
   return (
     <>
+    
       <Checkbox
         checked={componentDisabled}
         onChange={(e) => setComponentDisabled(e.target.checked)}
@@ -66,7 +62,7 @@ const EmployeeDetailForm: React.FC = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
-          disabled={componentDisabled}
+          //disabled={componentDisabled}
           style={{ maxWidth: 600 }}
           onFinish={onFinish}
           form={form}

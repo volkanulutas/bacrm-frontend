@@ -123,13 +123,12 @@ const ProposalListForm = () => {
 
   const getData = async () => {
     await getAll().then((res) => {
-      alert(JSON.stringify(res.data))
       setLoading(false);
       setDataSource(res.data);
     });
   };
 const navigateTo = (id: React.Key) => {
-  navigation(`/proposal-detail-form/${id}`);
+  navigation(`/proposal-detai/${id}`);
 };
   return(
     <div>

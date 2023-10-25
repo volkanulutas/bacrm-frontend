@@ -105,7 +105,7 @@ const TimesheetApproveListForm = () => {
   ];
    
 const navigateTo = () => {
-  navigation("/proposal-detail-form");
+  navigation("/proposal-detail");
 };
   return (
  
