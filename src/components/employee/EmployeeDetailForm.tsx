@@ -3,8 +3,9 @@ import React, { useRef, useState, useEffect } from "react";
 import "../../styles.css";
 import { PlusOutlined } from "@ant-design/icons";
 import moment, { Moment } from "moment";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getEmployeeById } from "../../service/employee.service";
+import { getAllDepartment } from "../../service/department.service";
 
 import {
   Button,
@@ -29,6 +30,7 @@ const normFile = (e: any) => {
 };
 
 interface Department {
+  id: string;
   name: string;
 }
 
@@ -50,6 +52,7 @@ interface Employee {
 
 const EmployeeDetailForm = () => {
   const { id } = useParams();
+  const [departmentList, setDepartmentList] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
@@ -57,7 +60,34 @@ const EmployeeDetailForm = () => {
 
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
+    getDepartmentData();
   }, [id, form]);
+
+  const getDepartmentData = async () => {
+    if (id === "-1") {
+      return;
+    }
+    setLoading(true);
+    await getAllDepartment().then((res) => {
+      setLoading(false);
+      const data = res.data;
+      setItem(data);
+
+      form.setFieldsValue({
+        id: data.id,
+        name: data.name,
+        middleName: data.middleName,
+        title: data.title,
+        department: data.department.name,
+        cellPhone: data.cellPhone,
+        internalPhone: data.internalPhone,
+        email: data.email,
+        startDate: moment(data.startDate),
+        birthdate: moment(data.birthdate),
+        address: data.address,
+      });
+    });
+  };
 
   const getData = async (id: string) => {
     if (id === "-1") {
@@ -137,6 +167,19 @@ const EmployeeDetailForm = () => {
             rules={[{ required: true, message: "Ünvan girmelisiniz." }]}
           >
             <Input placeholder="Ünvanınızı giriniz." />
+          </Form.Item>
+          <Form.Item
+            label="Departman:"
+            name="department"
+            rules={[{ required: true, message: "Depertman seçmelisiniz." }]}
+          >
+            <Select style={{ width: 200 }} placeholder="Seçiniz">
+              {departmentList.map((item: Department) => (
+                <Select.Option key={item.id} value={item.name}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             label="Departman"

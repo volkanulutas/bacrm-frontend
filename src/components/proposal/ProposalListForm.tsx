@@ -9,7 +9,7 @@ import {
   CloseCircleOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { getAll } from "../../service/proposal.service";
+import { getAllProposal } from "../../service/proposal.service";
 
 interface Customer {
   id: string;
@@ -24,6 +24,11 @@ interface Proposal {
   definition: string;
   date: number;
   customer: Customer;
+}
+
+interface Department {
+  id: string;
+  name: string;
 }
 
 const onChange: TableProps<Proposal>["onChange"] = (
@@ -131,13 +136,14 @@ const ProposalListForm = () => {
   ];
 
   const getData = async () => {
-    await getAll().then((res) => {
+    await getAllProposal().then((res) => {
       setLoading(false);
       setDataSource(res.data);
     });
   };
+
   const navigateTo = (id: React.Key) => {
-    navigation(`/proposal-detai/${id}`);
+    navigation(`/proposal-detail/${id}`);
   };
   return (
     <div>
