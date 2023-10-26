@@ -9,7 +9,6 @@ export const getEmployeeById = (id:string) => {
 };
 
 export const getAll = () => {
-  alert(API_BASE_URL + API_URL_EMPLOYEE)
   return axios.get(API_BASE_URL + API_URL_EMPLOYEE, { headers: authHeader() });
 };
 

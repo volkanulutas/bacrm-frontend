@@ -4,7 +4,7 @@ import { Button, Checkbox, Form, Input,Image } from 'antd';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
 
-import { authServiceLogin } from "../service/auth.service";
+import { authServiceLogin } from "../../service/auth.service";
 
 
 const Login = () => {

@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import "../../styles.css";
 import { PlusOutlined } from "@ant-design/icons";
+import moment, { Moment } from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEmployeeById } from "../../service/employee.service";
 
@@ -27,8 +28,24 @@ const normFile = (e: any) => {
   return e?.fileList;
 };
 
+interface Department {
+  name:string
+}
+
 interface Employee {
-  nameSurname: string;
+  id: React.Key;
+  name:string;
+  middleName:string;
+  surname: string;
+  employeeName: string;
+  title: string;
+  department: Department;
+  email:string;
+  cellPhone: string;
+  internalPhone: string;
+  startDate:Moment;
+  birthdate: Moment;
+  address: string;
 }
 
 const EmployeeDetailForm = () => {
@@ -36,13 +53,40 @@ const EmployeeDetailForm = () => {
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
+  const [item, setItem] = useState<Employee>();
 
-  const handleAdd = () => {
-   
+  useEffect(() => {
+    getData({ id }.id + "").then((res) => {});
+  }, [id, form]);
+ 
+
+
+  const getData = async (id: string) => {
+    if(id === "-1"){return;}
+    setLoading(true);
+    await getEmployeeById(id).then((res) => {
+      setLoading(false);
+      const data = res.data;
+      setItem(data);
+      alert(JSON.stringify(data))
+      form.setFieldsValue({
+        id: data.id,
+        name: data.name,
+        middleName: data.middleName,
+        title: data.title,
+        department: data.department.name,
+        cellPhone: data.cellPhone,
+        internalPhone: data.internalPhone,
+        email: data.email,
+        startDate: moment(data.startDate),
+        birthdate :moment( data.birthdate), 
+        address: data.address,
+     
+      });
+    });
   };
   const onFinish = (values: any) => {
-    
- 
+  
     // make api call
     setLoading(true);
     setTimeout(() => {
@@ -53,7 +97,6 @@ const EmployeeDetailForm = () => {
 
   return (
     <>
-    
       <Checkbox
         checked={componentDisabled}
         onChange={(e) => setComponentDisabled(e.target.checked)}
@@ -85,7 +128,7 @@ const EmployeeDetailForm = () => {
 
           <Form.Item
             label="Ad Soyad"
-            name={"nameSurname"}
+            name={"name"}
             rules={[{ required: true, message: "Ad Soyad girmelisiniz." }]}
           >
             <Input placeholder="Ad Soyad giriniz." />
@@ -99,7 +142,7 @@ const EmployeeDetailForm = () => {
           </Form.Item>
           <Form.Item
             label="Departman"
-            name={"depertmant"}
+            name={"department"}
             rules={[{ required: true, message: "Depertman girmelisiniz." }]}
           >
             <Input placeholder="Depertmanınızı giriniz." />
@@ -118,20 +161,20 @@ const EmployeeDetailForm = () => {
               { required: true, message: "Dahili Telefon girmelisiniz." },
             ]}
           >
-            <InputNumber placeholder="Dahili telefonunuzu giriniz." />
+            <InputNumber placeholder="Dahili Telefon" />
           </Form.Item>
           <Form.Item
-            label="İş E-Posta Adresi"
-            name={"workPhone"}
+            label="E-Posta Adresi"
+            name={"email"}
             rules={[
-              { required: true, message: "İş E-Posta Adresi girmelisiniz." },
+              { required: true, message: "E-Posta Adresi girmelisiniz." },
             ]}
           >
-            <Input placeholder="İş E-Posta adresinizi giriniz." />
+            <Input placeholder="E-Posta" />
           </Form.Item>
           <Form.Item
             label="İşe Giriş Tarihi"
-            name={"employmentDate"}
+            name={"startDate"}
             rules={[
               { required: true, message: "İşe Giriş Tarihini girmelisiniz." },
             ]}

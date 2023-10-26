@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { navigationItems } from "../config";
+import { navigationItems } from "../../config";
 import type { MenuProps, MenuTheme } from "antd";
 import { Menu, Switch } from "antd";
 import { Button, Tooltip, Space } from 'antd';

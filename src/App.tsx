@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MainRoutes from "./Routes";
-import HeaderMenu from "./components/HeaderMenu";
+import HeaderMenu from "./components/elements/HeaderMenu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as AuthService from "./service/auth.service";
 import IUser from './types/user.type';
@@ -31,7 +31,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import "./styles.css";
-import InnerContent from "./components/InnerContent";
+import InnerContent from "./components/elements/InnerContent";
 import MenuItem from "antd/es/menu/MenuItem";
 type MenuItem = Required<MenuProps>["items"][number];
 

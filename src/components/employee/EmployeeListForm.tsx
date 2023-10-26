@@ -10,14 +10,21 @@ import type { FilterConfirmProps } from 'antd/es/table/interface';
 
 import { getAll } from "../../service/employee.service";
 
+interface Department {
+  name:string
+}
+
 interface Employee {
   id: React.Key;
-  employeeName:string;
+  name:string;
+  middleName:string;
+  surname: string;
+  employeeName: string;
   title: string;
-  department: string;
-  eMail:string;
+  department: Department;
+  email:string;
   telephoneNumber: string;
-  employmentDate:number;
+  startDate:number;
 }
 type DataIndex = keyof Employee;
 
@@ -42,7 +49,7 @@ const EmployeeListForm = () => {
   const getData = async () => {
     await getAll().then((res) => {
       setLoading(false);
-      alert(JSON.stringify(res.data))
+      // alert(JSON.stringify(res.data))
       setDataSource(res.data);
     });
   };
@@ -159,35 +166,42 @@ const columns: ColumnsType<Employee> = [
     {
       title: 'Çalışan Adı',
       dataIndex: 'employeeName',
-      key: 'employeeName',
+      // key: 'name',
       width: '30%',
-      ...getColumnSearchProps('employeeName'),
-      sorter: (a,b) => a.employeeName.localeCompare(b.employeeName),
+      render: (text, record) => {
+        const middleName = (record.middleName ? record.middleName : '') + " ";
+        return record.name + " "+ middleName+ record.surname; 
+      },
+      //...getColumnSearchProps('employeeName'),
+      sorter: (a,b) => a.name.localeCompare(b.name),
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Ünvanı',
       dataIndex: 'title',
       key: 'title',
-      ...getColumnSearchProps('title'),
-      sorter: (a,b) => a.title.localeCompare(b.title),
-      sortDirections: ['descend', 'ascend'],
+      //...getColumnSearchProps('title'),
+      //sorter: (a,b) => a.title.localeCompare(b.title),
+      //sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Departman',
+      key: "department",
       dataIndex: 'department',
-      key: 'department',
-      ...getColumnSearchProps('department'),
-      sorter: (a,b) => a.department.localeCompare(b.department),
+      render: (text, record) => {
+        return record.department.name; 
+      },
+      //...getColumnSearchProps('department'),
+      sorter: (a,b) => a.department.name.localeCompare(b.department.name),
       sortDirections: ['descend', 'ascend'],
     },
 
 
     {
       title: 'E-Posta',
-      dataIndex: 'eMail',
-      key: 'eMail',
-      ...getColumnSearchProps('eMail'),
+      dataIndex: 'email',
+      key: 'email',
+      ...getColumnSearchProps('email'),
     },
     {
       title: 'Telefon',
@@ -197,11 +211,11 @@ const columns: ColumnsType<Employee> = [
     },
     {
       title: 'İşe Giriş Tarihi',
-      dataIndex: 'employmentDate',
-      key: 'employmentDate',
-      ...getColumnSearchProps('employmentDate'), //TODO: number a göre arıyor rander et
+      dataIndex: 'startDate',
+      key: 'startDate',
+      ...getColumnSearchProps('startDate'), //TODO: number a göre arıyor rander et
       render:((date:number) => getFullDate(date)),
-      sorter: (a,b) => a.employmentDate-b.employmentDate,
+      sorter: (a,b) => a.startDate-b.startDate,
       sortDirections: ['descend', 'ascend'],
     },
     {

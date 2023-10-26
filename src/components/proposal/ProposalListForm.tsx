@@ -60,6 +60,7 @@ const ProposalListForm = () => {
       title: "Müşteri Adı",
       dataIndex: "customerName",
       render: (text, record) => {
+        alert(record.customer.name)
         return record.customer.name;
       },
       filters: [

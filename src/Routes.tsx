@@ -1,25 +1,25 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import InnerContent from "./components/InnerContent";
-import Dashboard from "./components/Dashboard";
-import Tabs from "./components/Tabs";
+import InnerContent from "./components/elements/InnerContent";
+import Dashboard from "./components/elements/Dashboard";
+import Tabs from "./components/elements/Tabs";
 import Timesheet from "./components/timesheet/Timesheet";
 import TimesheetApproveListForm from "./components/timesheet/TimesheetApproveListForm";
-import Login from "./components/Login";
-import Logout from "./components/Logout";
-import Users from "./components/Users";
-import SingleUser from "./components/SingleUser";
-import NewUser from "./components/NewUser";
-import DynamicForm from "./components/DynamicForm";
+import Login from "./components/elements/Login";
+import Logout from "./components/elements/Logout";
+import Users from "./components/elements/Users";
+import SingleUser from "./components/elements/SingleUser";
+import NewUser from "./components/elements/NewUser";
+import DynamicForm from "./components/elements/DynamicForm";
 
-import Tab1 from "./components/Tab1";
-import Tab2 from "./components/Tab2";
-import Tab3 from "./components/Tab3";
+import Tab1 from "./components/elements/Tab1";
+import Tab2 from "./components/elements/Tab2";
+import Tab3 from "./components/elements/Tab3";
 
-import ProtectedRoutes from "./components/ProtectedRoutes";
-import PublicRoutes from "./components/PublicRoutes";
-import PermissionDenied from "./components/PermissionDenied";
+import ProtectedRoutes from "./components/elements/ProtectedRoutes";
+import PublicRoutes from "./components/elements/PublicRoutes";
+import PermissionDenied from "./components/elements/PermissionDenied";
 import ProposalFormList from "./components/proposal/ProposalListForm";
 import ProposalDetailForm from "./components/proposal/ProposalDetailForm";
 import LeaveApproveForm from "./components/leave/LeaveApproveForm";
