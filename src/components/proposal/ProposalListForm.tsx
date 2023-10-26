@@ -4,7 +4,11 @@ import { Button, Form, Input, Popconfirm, Table, Space } from "antd";
 import type { FormInstance } from "antd/es/form";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {CheckCircleOutlined,CloseCircleOutlined,QuestionCircleOutlined} from'@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { getAll } from "../../service/proposal.service";
 
 interface Customer {
@@ -18,7 +22,7 @@ interface Proposal {
   id: React.Key;
   proposalId: string;
   definition: string;
-  date: number,
+  date: number;
   customer: Customer;
 }
 
@@ -60,7 +64,6 @@ const ProposalListForm = () => {
       title: "Müşteri Adı",
       dataIndex: "customerName",
       render: (text, record) => {
-        alert(record.customer.name)
         return record.customer.name;
       },
       filters: [
@@ -109,14 +112,19 @@ const ProposalListForm = () => {
       dataIndex: "date",
       // TODO: sorter: (a, b) => a.date - b.date,
     },
-  
+
     {
-      title: 'İşlemler',
-      dataIndex: 'action',
+      title: "İşlemler",
+      dataIndex: "action",
       render: (_, record: { id: React.Key }) =>
         dataSource.length >= 1 ? (
           <div>
-            <Button type="primary" shape="circle" onClick={() => navigateTo(record.id)} icon={<QuestionCircleOutlined/>}></Button>
+            <Button
+              type="primary"
+              shape="circle"
+              onClick={() => navigateTo(record.id)}
+              icon={<QuestionCircleOutlined />}
+            ></Button>
           </div>
         ) : null,
     },
@@ -128,19 +136,18 @@ const ProposalListForm = () => {
       setDataSource(res.data);
     });
   };
-const navigateTo = (id: React.Key) => {
-  navigation(`/proposal-detai/${id}`);
-};
-  return(
+  const navigateTo = (id: React.Key) => {
+    navigation(`/proposal-detai/${id}`);
+  };
+  return (
     <div>
-       <h2>Teklif Listesi</h2>
+      <h2>Teklif Listesi</h2>
       <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni Teklif Ekle
       </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
     </div>
   );
-
-  };
+};
 
 export default ProposalListForm;

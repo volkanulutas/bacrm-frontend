@@ -10,7 +10,7 @@ import {
   Button,
   Checkbox,
   DatePicker,
-  Form, 
+  Form,
   Input,
   InputNumber,
   Select,
@@ -29,21 +29,21 @@ const normFile = (e: any) => {
 };
 
 interface Department {
-  name:string
+  name: string;
 }
 
 interface Employee {
   id: React.Key;
-  name:string;
-  middleName:string;
+  name: string;
+  middleName: string;
   surname: string;
   employeeName: string;
   title: string;
   department: Department;
-  email:string;
+  email: string;
   cellPhone: string;
   internalPhone: string;
-  startDate:Moment;
+  startDate: Moment;
   birthdate: Moment;
   address: string;
 }
@@ -58,17 +58,17 @@ const EmployeeDetailForm = () => {
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
   }, [id, form]);
- 
-
 
   const getData = async (id: string) => {
-    if(id === "-1"){return;}
+    if (id === "-1") {
+      return;
+    }
     setLoading(true);
     await getEmployeeById(id).then((res) => {
       setLoading(false);
       const data = res.data;
       setItem(data);
-      alert(JSON.stringify(data))
+
       form.setFieldsValue({
         id: data.id,
         name: data.name,
@@ -79,14 +79,12 @@ const EmployeeDetailForm = () => {
         internalPhone: data.internalPhone,
         email: data.email,
         startDate: moment(data.startDate),
-        birthdate :moment( data.birthdate), 
+        birthdate: moment(data.birthdate),
         address: data.address,
-     
       });
     });
   };
   const onFinish = (values: any) => {
-  
     // make api call
     setLoading(true);
     setTimeout(() => {

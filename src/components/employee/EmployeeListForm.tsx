@@ -1,30 +1,33 @@
 import React, { useRef, useState, useEffect } from "react";
-import {Table,Space,Button, Input } from 'antd';
-import {QuestionCircleOutlined} from'@ant-design/icons';
+import { Table, Space, Button, Input } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { SearchOutlined } from '@ant-design/icons';
-import Highlighter from 'react-highlight-words';
-import type { InputRef } from 'antd';
-import type { ColumnType, ColumnsType } from 'antd/es/table';
-import type { FilterConfirmProps } from 'antd/es/table/interface';
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
+import type { InputRef } from "antd";
+import type { ColumnType, ColumnsType } from "antd/es/table";
+import type { FilterConfirmProps } from "antd/es/table/interface";
+import moment from "moment";
 
 import { getAll } from "../../service/employee.service";
 
 interface Department {
-  name:string
+  name: string;
 }
 
 interface Employee {
   id: React.Key;
-  name:string;
-  middleName:string;
+  name: string;
+  middleName: string;
   surname: string;
   employeeName: string;
   title: string;
   department: Department;
-  email:string;
+  email: string;
   telephoneNumber: string;
-  startDate:number;
+  startDate: number;
+  birthdate: number;
+  cellPhone: string;
 }
 type DataIndex = keyof Employee;
 
@@ -34,22 +37,20 @@ export const getFullDate = (dateNum: number): string => {
 };
 const EmployeeListForm = () => {
   const navigation = useNavigate();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [dataSource, setDataSource] = useState([]);
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     getData();
   }, []);
 
-  
   const getData = async () => {
     await getAll().then((res) => {
       setLoading(false);
-      // alert(JSON.stringify(res.data))
       setDataSource(res.data);
     });
   };
@@ -57,7 +58,7 @@ const EmployeeListForm = () => {
   const navigateTo = (id: React.Key) => {
     navigation(`/employee-detail/${id}`);
   };
-  
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -68,7 +69,7 @@ const EmployeeListForm = () => {
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
-    dataIndex: DataIndex,
+    dataIndex: DataIndex
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -77,23 +78,37 @@ const EmployeeListForm = () => {
 
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
-    setSearchText('');
+    setSearchText("");
   };
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<Employee> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+  const getColumnSearchProps = (
+    dataIndex: DataIndex
+  ): ColumnType<Employee> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
         />
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}
@@ -131,7 +146,7 @@ const EmployeeListForm = () => {
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -146,17 +161,17 @@ const EmployeeListForm = () => {
     render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ''}
+          textToHighlight={text ? text.toString() : ""}
         />
       ) : (
         text
       ),
   });
 
-const columns: ColumnsType<Employee> = [
+  const columns: ColumnsType<Employee> = [
     {
       title: "No",
       dataIndex: "id",
@@ -164,59 +179,59 @@ const columns: ColumnsType<Employee> = [
       width: "5%",
     },
     {
-      title: 'Çalışan Adı',
-      dataIndex: 'employeeName',
+      title: "Çalışan Adı",
+      dataIndex: "employeeName",
       // key: 'name',
-      width: '30%',
+      width: "30%",
       render: (text, record) => {
-        const middleName = (record.middleName ? record.middleName : '') + " ";
-        return record.name + " "+ middleName+ record.surname; 
+        const middleName = (record.middleName ? record.middleName : "") + " ";
+        return record.name + " " + middleName + record.surname;
       },
       //...getColumnSearchProps('employeeName'),
-      sorter: (a,b) => a.name.localeCompare(b.name),
-      sortDirections: ['descend', 'ascend'],
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ["descend", "ascend"],
     },
     {
-      title: 'Ünvanı',
-      dataIndex: 'title',
-      key: 'title',
+      title: "Ünvanı",
+      dataIndex: "title",
+      key: "title",
       //...getColumnSearchProps('title'),
-      //sorter: (a,b) => a.title.localeCompare(b.title),
-      //sortDirections: ['descend', 'ascend'],
+      sorter: (a, b) => a.title.localeCompare(b.title),
+      sortDirections: ["descend", "ascend"],
     },
     {
-      title: 'Departman',
-      key: "department",
-      dataIndex: 'department',
+      title: "Departman",
+      // key: "department",
+      dataIndex: "department",
       render: (text, record) => {
-        return record.department.name; 
+        return record.department.name;
       },
       //...getColumnSearchProps('department'),
-      sorter: (a,b) => a.department.name.localeCompare(b.department.name),
-      sortDirections: ['descend', 'ascend'],
+      sorter: (a, b) => a.department.name.localeCompare(b.department.name),
+      sortDirections: ["descend", "ascend"],
     },
 
+    {
+      title: "E-Posta",
+      dataIndex: "email",
+      key: "email",
+      ...getColumnSearchProps("email"),
+    },
+    {
+      title: "Telefon",
+      dataIndex: "cellPhone",
+      key: "cellPhone",
+      ...getColumnSearchProps("telephoneNumber"),
+    },
+    {
+      title: "İşe Giriş Tarihi",
+      dataIndex: "startDate",
+      //key: "startDate",
 
-    {
-      title: 'E-Posta',
-      dataIndex: 'email',
-      key: 'email',
-      ...getColumnSearchProps('email'),
-    },
-    {
-      title: 'Telefon',
-      dataIndex: 'telephoneNumber',
-      key: 'telephoneNumber',
-      ...getColumnSearchProps('telephoneNumber'),
-    },
-    {
-      title: 'İşe Giriş Tarihi',
-      dataIndex: 'startDate',
-      key: 'startDate',
-      ...getColumnSearchProps('startDate'), //TODO: number a göre arıyor rander et
-      render:((date:number) => getFullDate(date)),
-      sorter: (a,b) => a.startDate-b.startDate,
-      sortDirections: ['descend', 'ascend'],
+      // ...getColumnSearchProps("startDate"), //TODO: number a göre arıyor rander et
+      render: (date: number) => moment(date).format("DD/MM/YYYY HH:mm:ss"),
+      sorter: (a, b) => a.startDate - b.startDate,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "İşlemler",
@@ -225,10 +240,9 @@ const columns: ColumnsType<Employee> = [
         dataSource.length >= 1 ? (
           <div>
             <Button
-              type="primary" 
+              type="primary"
               shape="circle"
               onClick={() => navigateTo(record.id)}
-
               icon={<QuestionCircleOutlined />}
             ></Button>
           </div>
@@ -241,8 +255,8 @@ const columns: ColumnsType<Employee> = [
       <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni Çalışan Ekle
       </Button>
-      
-        <Table columns={columns} dataSource={dataSource} />
+
+      <Table columns={columns} dataSource={dataSource} />
     </div>
   );
 };
