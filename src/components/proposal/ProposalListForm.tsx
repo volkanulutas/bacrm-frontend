@@ -137,7 +137,7 @@ const ProposalListForm = () => {
     });
   };
   const navigateTo = (id: React.Key) => {
-    navigation(`/proposal-detai/${id}`);
+    navigation(`/proposal-detail/${id}`);
   };
   return (
     <div>
