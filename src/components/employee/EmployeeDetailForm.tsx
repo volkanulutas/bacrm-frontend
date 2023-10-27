@@ -5,6 +5,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import moment, { Moment } from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEmployeeById } from "../../service/employee.service";
+import { getAllDepartment } from "../../service/department.service";
 
 import {
   Button,
@@ -29,6 +30,7 @@ const normFile = (e: any) => {
 };
 
 interface Department {
+  id: string,
   name: string;
 }
 
@@ -51,13 +53,23 @@ interface Employee {
 const EmployeeDetailForm = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [departmentList, setDepartmentList] = useState<Department[]>([]);
+  
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
   const [item, setItem] = useState<Employee>();
 
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
+    getAllDepartmentData(); 
   }, [id, form]);
+
+  const getAllDepartmentData = async () => {
+
+    await getAllDepartment().then((res) => {
+      setDepartmentList(res.data);
+    });
+  }
 
   const getData = async (id: string) => {
     if (id === "-1") {
@@ -138,13 +150,19 @@ const EmployeeDetailForm = () => {
           >
             <Input placeholder="Ünvanınızı giriniz." />
           </Form.Item>
-          <Form.Item
-            label="Departman"
-            name={"department"}
-            rules={[{ required: true, message: "Depertman girmelisiniz." }]}
+          <Form.Item label="Departman" name={"department" } rules={[{ required: true, message: "Depertman seçmelisiniz." }]}>
+          <Select
+            style={{ width: 200 }}
+            placeholder="Departman"
           >
-            <Input placeholder="Depertmanınızı giriniz." />
+            {departmentList.map((item) => (
+              <Select.Option key={item.id} value={item.name}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
           </Form.Item>
+
           <Form.Item
             label="Cep Telefonu"
             name={"cellPhone"}
@@ -194,11 +212,6 @@ const EmployeeDetailForm = () => {
             rules={[{ required: true, message: "Adres girmelisiniz." }]}
           >
             <TextArea rows={4} placeholder="Adresinizi giriniz." />
-          </Form.Item>
-          <Form.Item label="Select">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-            </Select>
           </Form.Item>
           <Space direction="horizontal" size={12}>
             <Button
