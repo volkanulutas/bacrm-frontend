@@ -53,7 +53,6 @@ const getData = async (id: string) => {
   await getProposalById(id).then((res) => {
     setLoading(false);
     const data = res.data;
-    alert(JSON.stringify(data));
     setItem(data);
     form.setFieldsValue({
       id: data.id,
