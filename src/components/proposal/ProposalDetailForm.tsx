@@ -1,6 +1,6 @@
 import React, {  useState, useEffect } from "react";
 import moment from "moment";
-import { Divider } from "antd";
+import { Divider, Select } from "antd";
 import { useParams } from "react-router-dom";
 import {
   Button,
@@ -11,13 +11,11 @@ import {
   Space,
 } from "antd";
 import { getProposalById } from "../../service/proposal.service";
+import { getAllCustomer } from "../../service/customer.service"
 
 interface Customer {
   id: string;
   name: string;
-  definition: string;
-  address: string;
-  telephone: string;
 }
 
 interface Proposal {
@@ -34,12 +32,20 @@ const [item, setItem] = useState<Proposal>();
 const [loading, setLoading] = useState(false);
 const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
 const [form] = Form.useForm();
-
+const [customerList, setCustomerList] = useState<Customer[]>([]);
 
 useEffect(() => {
   getData({ id }.id + "").then((res) => {});
+  getCustomerData();
 }, [id, form]);
 
+const getCustomerData = async () => {
+  if(id === "-1"){return;}
+  setLoading(true);
+  await getAllCustomer().then((res) => {
+    setCustomerList(res.data);
+  });
+};
 
 const getData = async (id: string) => {
   if(id === "-1"){return;}
@@ -47,6 +53,7 @@ const getData = async (id: string) => {
   await getProposalById(id).then((res) => {
     setLoading(false);
     const data = res.data;
+    alert(JSON.stringify(data));
     setItem(data);
     form.setFieldsValue({
       id: data.id,
@@ -95,15 +102,21 @@ const getData = async (id: string) => {
             name={"proposalId"}
             rules={[{ required: true, message: "Teklif No girmelisiniz." }]}  
           >
-            <Input placeholder="Teklif No:"/>
+            <Input placeholder="Teklif No:"  disabled={id === "-1" ? false : true}/>
           </Form.Item>
-          <Form.Item
-            label="Müşteri Adı"
-            name={"customerName"}
-            rules={[{ required: true, message: "Müşteri Adını girmelisiniz." }]}
+          <Form.Item label="Müşteri" name={"customerName" } rules={[{ required: true, message: "Müşteri seçmelisiniz." }]}>
+          <Select
+            style={{ width: 200 }}
+            placeholder="Müşteri"
           >
-            <Input placeholder="Müşteri Adı" />
+            {customerList.map((item) => (
+              <Select.Option key={item.id} value={item.name}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
           </Form.Item>
+
           <Form.Item
             label="Açıklama"
             name={"definition"}
