@@ -102,10 +102,9 @@ function App() {
   })*/
 
   const items: MenuItem[] = [
-
-
     getItem("Çalışanlar", "employee", <UserOutlined />, [
       getItem("Çalışan Listesi", "employee-list"),
+      getItem("Departmanlar", "department-list"),
     ]),
     getItem("İşler", "work", <PieChartOutlined />, [
       getItem("İş Listesi", "work-list"),
@@ -122,7 +121,6 @@ function App() {
       getItem("Müşteriler", "customer-list"),
     ])
   ];
-
 
   const logOut = () => {
     AuthService.logout();

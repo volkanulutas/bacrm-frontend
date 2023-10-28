@@ -4,14 +4,11 @@ import { Divider, Select } from "antd";
 import { useParams } from "react-router-dom";
 import { Button, DatePicker, Form, Input, Spin, Space } from "antd";
 import { getProposalById } from "../../service/proposal.service";
-import { getAllCustomer } from "../../service/customer.service";
+import { getAllCustomer } from "../../service/customer.service"
 
 interface Customer {
   id: string;
   name: string;
-  definition: string;
-  address: string;
-  telephone: string;
 }
 
 interface Proposal {
@@ -23,24 +20,25 @@ interface Proposal {
 }
 
 const ProposalDetailForm = () => {
-  const { id } = useParams();
-  const [item, setItem] = useState<Proposal>();
-  const [customerList, setCustomerList] = useState<Customer[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
-  const [form] = Form.useForm();
+const { id } = useParams();
+const [item, setItem] = useState<Proposal>();
+const [loading, setLoading] = useState(false);
+const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
+const [form] = Form.useForm();
+const [customerList, setCustomerList] = useState<Customer[]>([]);
 
-  useEffect(() => {
-    getData({ id }.id + "").then((res) => {});
-    getCustomerData();
-  }, [id, form]);
+useEffect(() => {
+  getData({ id }.id + "").then((res) => {});
+  getCustomerData();
+}, [id, form]);
 
-  const getCustomerData = async () => {
-    await getAllCustomer().then((res) => {
-      setLoading(false);
-      setCustomerList(res.data);
-    });
-  };
+const getCustomerData = async () => {
+  if(id === "-1"){return;}
+  setLoading(true);
+  await getAllCustomer().then((res) => {
+    setCustomerList(res.data);
+  });
+};
 
   const getData = async (id: string) => {
     if (id === "-1") {
@@ -80,15 +78,50 @@ const ProposalDetailForm = () => {
     <div>
       <Divider>Teklif Detayı</Divider>
       <div>
-        <Spin spinning={loading}>
-          <Form
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-            // disabled={componentDisabled}
-            style={{ maxWidth: 600 }}
-            onFinish={onFinish}
-            form={form}
+      <Spin spinning={loading}>
+        <Form
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
+          layout="horizontal"
+          // disabled={componentDisabled}
+          style={{ maxWidth: 600 }}
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item label="No" name={"id"}>
+            <Input placeholder="No" disabled={true} />
+          </Form.Item>
+          <Form.Item
+            label="Teklif No"
+            name={"proposalId"}
+            rules={[{ required: true, message: "Teklif No girmelisiniz." }]}  
+          >
+            <Input placeholder="Teklif No:"  disabled={id === "-1" ? false : true}/>
+          </Form.Item>
+          <Form.Item label="Müşteri" name={"customerName" } rules={[{ required: true, message: "Müşteri seçmelisiniz." }]}>
+          <Select
+            style={{ width: 200 }}
+            placeholder="Müşteri"
+          >
+            {customerList.map((item) => (
+              <Select.Option key={item.id} value={item.name}>
+                {item.name}
+              </Select.Option>
+            ))}
+          </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="Açıklama"
+            name={"definition"}
+            rules={[{ required: false, message: "Açıklamayı girmelisiniz." }]}
+          >
+            <Input placeholder="Açıklama" />
+          </Form.Item>
+          <Form.Item
+            label="Teklif Tarihi"
+            name={"date"}
+            rules={[{ required: false, message: "Teklif Tarihini girmelisiniz." }]}
           >
             <Form.Item label="No" name={"id"}>
               <Input placeholder="No" disabled={true} />

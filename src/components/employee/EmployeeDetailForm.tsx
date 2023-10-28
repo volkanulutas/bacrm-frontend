@@ -54,6 +54,8 @@ const EmployeeDetailForm = () => {
   const { id } = useParams();
   const [departmentList, setDepartmentList] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
+  const [departmentList, setDepartmentList] = useState<Department[]>([]);
+
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
   const [item, setItem] = useState<Employee>();
@@ -188,6 +190,7 @@ const EmployeeDetailForm = () => {
           >
             <Input placeholder="Depertmanınızı giriniz." />
           </Form.Item>
+
           <Form.Item
             label="Cep Telefonu"
             name={"cellPhone"}
@@ -237,11 +240,6 @@ const EmployeeDetailForm = () => {
             rules={[{ required: true, message: "Adres girmelisiniz." }]}
           >
             <TextArea rows={4} placeholder="Adresinizi giriniz." />
-          </Form.Item>
-          <Form.Item label="Select">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-            </Select>
           </Form.Item>
           <Space direction="horizontal" size={12}>
             <Button
