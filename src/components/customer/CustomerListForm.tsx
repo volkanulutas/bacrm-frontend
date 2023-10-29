@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Button, Table } from "antd";
+import { Button, Table, Space, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import {
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
-import { getAllCustomer } from "../../service/customer.service";
+import { QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { getAllCustomer, deleteCustomer } from "../../service/customer.service";
 
 interface Customer {
   id: React.Key;
@@ -26,6 +24,7 @@ const CustomerListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modal, contextHolder] = Modal.useModal();
   useEffect(() => {
     getData();
   }, []);
@@ -85,17 +84,45 @@ const CustomerListForm = () => {
               onClick={() => navigateTo(record.id)}
               icon={<QuestionCircleOutlined />}
             ></Button>
+            <Space>
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => confirm(parseInt(record.id + "", 10))}
+              ></Button>
+            </Space>
+            {contextHolder}
           </div>
         ) : null,
     },
   ];
 
-
   const getData = async () => {
     await getAllCustomer().then((res) => {
-     
       setLoading(false);
       setDataSource(res.data);
+    });
+  };
+
+  const confirm = (id: number) => {
+    modal.confirm({
+      title: "Silme Onayı",
+      icon: <CloseCircleOutlined />,
+      content: "Silmek İstediğinize Emin Misiniz?",
+      okText: "Sil",
+      cancelText: "Vazgeç",
+      onOk: () => {
+        removeDepartment(id);
+      },
+    });
+  };
+
+  const removeDepartment = async (id: number) => {
+    await deleteCustomer(id).then((res) => {
+      setLoading(false);
+      window.location.reload();
     });
   };
 
@@ -115,13 +142,11 @@ const CustomerListForm = () => {
   // TODO: table filter, sorter ekle
   return (
     <div>
-     
       <h2>Müşteri Listesi</h2>
       <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni Müşteri Ekle
       </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
-      
     </div>
   );
 };

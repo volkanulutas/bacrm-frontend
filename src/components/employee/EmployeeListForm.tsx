@@ -51,6 +51,7 @@ const EmployeeListForm = () => {
   const getData = async () => {
     await getAll().then((res) => {
       setLoading(false);
+      alert(res.data);
       setDataSource(res.data);
     });
   };
@@ -204,7 +205,7 @@ const EmployeeListForm = () => {
       // key: "department",
       dataIndex: "department",
       render: (text, record) => {
-        return record.department.name;
+        return record?.department?.name;
       },
       //...getColumnSearchProps('department'),
       sorter: (a, b) => a.department.name.localeCompare(b.department.name),

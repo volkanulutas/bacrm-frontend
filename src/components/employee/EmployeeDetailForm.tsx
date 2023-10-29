@@ -54,7 +54,6 @@ const EmployeeDetailForm = () => {
   const { id } = useParams();
   const [departmentList, setDepartmentList] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
-  const [departmentList, setDepartmentList] = useState<Department[]>([]);
 
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
@@ -80,7 +79,7 @@ const EmployeeDetailForm = () => {
         name: data.name,
         middleName: data.middleName,
         title: data.title,
-        department: data.department.name,
+        department: data?.department?.name,
         cellPhone: data.cellPhone,
         internalPhone: data.internalPhone,
         email: data.email,

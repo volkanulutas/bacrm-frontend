@@ -2,25 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
+import { Button, Form, Input, Divider, Spin, Space } from "antd";
 import {
-  Button,
-  Form,
-  Input,
-  Divider,
-  Spin,
-  Space,
-} from "antd";
-import { getDepartmentById } from "../../service/department.service";
+  getDepartmentById,
+  createDepartment,
+} from "../../service/department.service";
 const { TextArea } = Input;
 
-interface Work {
+interface Department {
   id: string;
   name: string;
-  definition: string;
-  workloadHour: number;
-  endDate: number;
-  startDate: number;
-  planningDate: number;
+  description: string;
 }
 
 export const getMillisDate = (dateStr: string): number => {
@@ -39,43 +31,49 @@ const DepartmentDetailForm = () => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [item, setItem] = useState<Work>();
+  const [item, setItem] = useState<Department>();
 
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
   }, [id, form]);
 
   const getData = async (id: string) => {
-    if(id === "-1"){return;}
+    if (id === "-1") {
+      return;
+    }
     setLoading(true);
     await getDepartmentById(id).then((res) => {
       setLoading(false);
       const data = res.data;
       setItem(data);
+      alert(JSON.stringify(data));
       form.setFieldsValue({
         id: data.id,
         name: data.name,
-        definition: data.definition
+        description: data.description,
       });
     });
   };
 
   const onFinish = (values: any) => {
-    const data = {
-      id: values.id,
-      definition: values.definition,
-      endDate: getMillisDate(values.endDate),
-      name: values.name,
-      planningDate: getMillisDate(values.planningDate),
-      startDate: getMillisDate(values.startDate),
-      workloadHour: values.workLoadHour,
-    };
+    setLoading(true);
+    setTimeout(() => {
+      form.resetFields();
+      createDepartment(values)
+        .then((response) => {
+          navigate("/department-list", { replace: true });
+        })
+        .catch((error) => {
+          alert(error.response.status);
+        });
+      setLoading(false);
+    }, 500);
   };
 
   return (
     <div>
       <Spin spinning={loading}>
-        <Divider>Müşteri Detayı</Divider>
+        <Divider>Departman Detayı</Divider>
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
@@ -91,15 +89,20 @@ const DepartmentDetailForm = () => {
           <Form.Item
             label="Departman Adı"
             name={"name"}
-            rules={[{ required: true, message: "Departman Adını girmelisiniz." }]}
+            rules={[
+              { required: true, message: "Departman Adını girmelisiniz." },
+            ]}
           >
             <Input placeholder="Departman Adı" />
           </Form.Item>
           <Form.Item
             label="Departman Açıklaması"
-            name={"definition"}
+            name={"description"}
             rules={[
-              { required: false, message: "Departman Açıklamasını girmelisiniz." },
+              {
+                required: true,
+                message: "Departman Açıklamasını girmelisiniz.",
+              },
             ]}
           >
             <Input placeholder="Departman Açıklaması" />

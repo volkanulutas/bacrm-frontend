@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Button, Table } from "antd";
+import { Button, Table, Modal, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import { QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import {
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
-import { getAllDepartment } from "../../service/department.service";
+  getAllDepartment,
+  deleteDepartment,
+} from "../../service/department.service";
 
-interface Customer {
+interface Department {
   id: React.Key;
   name: string;
-  definition: string;
-  address: string;
-  telephone: string;
+  description: string;
 }
 
-type DataIndex = keyof Customer;
+type DataIndex = keyof Department;
 
 export const getFullDate = (dateNum: number): string => {
   let date = new Date(dateNum);
@@ -26,10 +25,25 @@ const DepartmentListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modal, contextHolder] = Modal.useModal();
+
+  const confirm = (id: number) => {
+    modal.confirm({
+      title: "Silme Onayı",
+      icon: <CloseCircleOutlined />,
+      content: "Silmek İstediğinize Emin Misiniz?",
+      okText: "Sil",
+      cancelText: "Vazgeç",
+      onOk: () => {
+        removeDepartment(id);
+      },
+    });
+  };
+
   useEffect(() => {
     getData();
   }, []);
-  const columns: ColumnsType<Customer> = [
+  const columns: ColumnsType<Department> = [
     {
       title: "No",
       dataIndex: "id",
@@ -48,11 +62,11 @@ const DepartmentListForm = () => {
     },
     {
       title: "Açıklama",
-      dataIndex: "definition",
+      dataIndex: "description",
       filterSearch: true,
       width: "25%",
       // TODO:    ...getColumnSearchProps('definition'),
-      sorter: (a, b) => a.definition.localeCompare(b.definition),
+      sorter: (a, b) => a.description.localeCompare(b.description),
       sortDirections: ["descend", "ascend"],
     },
     // TODO: uygun element kullanarak Dept. a ait kullanıcıları details da göster.
@@ -68,21 +82,36 @@ const DepartmentListForm = () => {
               onClick={() => navigateTo(record.id)}
               icon={<QuestionCircleOutlined />}
             ></Button>
+            <Space>
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => confirm(parseInt(record.id + "", 10))}
+              ></Button>
+            </Space>
+            {contextHolder}
           </div>
         ) : null,
     },
   ];
 
-
   const getData = async () => {
     await getAllDepartment().then((res) => {
-     
       setLoading(false);
       setDataSource(res.data);
     });
   };
 
-  const onChange: TableProps<Customer>["onChange"] = (
+  const removeDepartment = async (id: number) => {
+    await deleteDepartment(id).then((res) => {
+      setLoading(false);
+      window.location.reload();
+    });
+  };
+
+  const onChange: TableProps<Department>["onChange"] = (
     pagination,
     filters,
     sorter,
@@ -98,13 +127,11 @@ const DepartmentListForm = () => {
   // TODO: table filter, sorter ekle
   return (
     <div>
-     
       <h2>Departman Listesi</h2>
       <Button type="primary" onClick={() => navigateTo(-1)}>
         Yeni Departman Ekle
       </Button>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
-      
     </div>
   );
 };
