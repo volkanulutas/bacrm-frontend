@@ -148,10 +148,12 @@ const CustomerListForm = () => {
   // TODO: table filter, sorter ekle
   return (
     <div>
-      <h2>Müşteri Listesi</h2>
-      <Button type="primary" onClick={() => navigateTo(-1)}>
-        Yeni Müşteri Ekle
-      </Button>
+      <Space direction="vertical">
+        <h2>Müşteri Listesi</h2>
+        <Button type="primary" onClick={() => navigateTo(-1)} className="bcrm-margin-bottom">
+          Yeni Müşteri Ekle
+        </Button>
+      </Space>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
     </div>
   );

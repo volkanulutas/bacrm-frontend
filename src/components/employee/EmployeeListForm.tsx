@@ -213,7 +213,7 @@ const EmployeeListForm = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Departman",
+      title: "Bölüm",
       // key: "department",
       dataIndex: "department",
       render: (text, record) => {
@@ -278,11 +278,12 @@ const EmployeeListForm = () => {
   ];
   return (
     <div>
-      <h2>Çalışanlar</h2>
-      <Button type="primary" onClick={() => navigateTo(-1)}>
-        Yeni Çalışan Ekle
-      </Button>
-
+      <Space direction="vertical">
+        <h2>Çalışanlar</h2>
+        <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
+          Yeni Çalışan Ekle
+        </Button>   
+        </Space>
       <Table columns={columns} dataSource={dataSource} />
     </div>
   );

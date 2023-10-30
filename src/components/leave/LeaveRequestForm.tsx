@@ -119,14 +119,16 @@ const LeaveRequestForm = () => {
           </Form.Item>      
           <Form.Item {...tailLayout}>
             <Space>
-              <Button type="primary" htmlType="submit" className="bacrm-margin-right">
-                Onaya Gönder
+              <Space>
+                <Button type="primary" htmlType="submit">
+                  Onaya Gönder
+                </Button>
+              </Space>
+              <Space>
+                <Button htmlType="button" onClick={onReset}>
+                  Temizle
               </Button>
-            </Space>
-            <Space>
-              <Button htmlType="button" onClick={onReset}>
-                Temizle
-             </Button>
+              </Space>
             </Space>
         </Form.Item>
       </Form>

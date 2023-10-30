@@ -164,13 +164,13 @@ const WorkListForm = () => {
   // TODO: table filter, sorter ekle
   return (
     <div>
-     
-      <h2>İş Listesi</h2>
-      <Button type="primary" onClick={() => navigateTo(-1)}>
-        Yeni İş Ekle
-      </Button>
+      <Space direction="vertical">
+        <h2>İş Listesi</h2>
+        <Button type="primary" onClick={() => navigateTo(-1)}>
+          Yeni İş Ekle
+        </Button>
+      </Space>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
-      
     </div>
   );
 };

@@ -73,7 +73,7 @@ const DepartmentDetailForm = () => {
   return (
     <div>
       <Spin spinning={loading}>
-        <Divider>Departman Detayı</Divider>
+        <Divider>Bölüm Detayı</Divider>
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
@@ -87,25 +87,25 @@ const DepartmentDetailForm = () => {
             <Input placeholder="No" disabled={true} />
           </Form.Item>
           <Form.Item
-            label="Departman Adı"
+            label="Bölüm Adı"
             name={"name"}
             rules={[
-              { required: true, message: "Departman Adını girmelisiniz." },
+              { required: true, message: "Bölüm Adını girmelisiniz." },
             ]}
           >
-            <Input placeholder="Departman Adı" />
+            <Input placeholder="Bölüm Adı" />
           </Form.Item>
           <Form.Item
-            label="Departman Açıklaması"
+            label="Bölüm Açıklaması"
             name={"description"}
             rules={[
               {
                 required: true,
-                message: "Departman Açıklamasını girmelisiniz.",
+                message: "Bölüm Açıklamasını girmelisiniz.",
               },
             ]}
           >
-            <Input placeholder="Departman Açıklaması" />
+            <Input placeholder="Bölüm Açıklaması" />
           </Form.Item>
 
           <Space direction="horizontal" size={12}>

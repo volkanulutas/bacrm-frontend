@@ -208,35 +208,31 @@ const LeaveApproveForm = () => {
       render: (_, record: { key: React.Key }) =>
         data.length >= 1 ? (
           <div>
-             
-
- <Button type="primary"  className="marginright" shape="circle" icon={< CheckCircleOutlined/>}></Button>
- <Button type="primary" danger shape="circle" onClick={showModal} icon={< CloseCircleOutlined/>}></Button>
-
-
-
+            <Space>
+              <Space>
+                <Button type="primary"  className="marginright" shape="circle" icon={< CheckCircleOutlined/>}></Button>
+              </Space>
+              <Space>
+                <Button type="primary" danger shape="circle" onClick={showModal} icon={< CloseCircleOutlined/>}></Button>
+              </Space>
+            </Space>
           </div>
-         
         ) : null,
     },
   ];
 
 	return (
     <div>
+      <Space direction="vertical">
         <h2>İzin Onay Formu</h2>
-
         <Divider orientation="center">İzin Talepleri
-      </Divider>
+        </Divider>
+      </Space>
       <Table columns={columns} dataSource={data} />
-     
-      <Modal title="Red Nedeni" cancelButtonProps={{ style: { display: 'none' } }}  okText="Reddet"   open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Red Nedeni" cancelButtonProps={{ style: { display: 'none' } }}  okText="Reddet" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Input></Input>
-        
       </Modal>
-    
     </div>
-    
-    
   );
 }
 export default LeaveApproveForm;

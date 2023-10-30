@@ -179,10 +179,12 @@ const ProposalListForm = () => {
   };
   return (
     <div>
-      <h2>Teklif Listesi</h2>
-      <Button type="primary" onClick={() => navigateTo(-1)}>
-        Yeni Teklif Ekle
-      </Button>
+      <Space direction="vertical">
+        <h2>Teklif Listesi</h2>
+        <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
+          Yeni Teklif Ekle
+        </Button>
+      </Space>
       <Table columns={columns} dataSource={dataSource} onChange={onChange} />
     </div>
   );
