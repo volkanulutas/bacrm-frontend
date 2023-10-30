@@ -51,8 +51,9 @@ const EmployeeListForm = () => {
   const getData = async () => {
     await getAll().then((res) => {
       setLoading(false);
-      alert(res.data);
       setDataSource(res.data);
+    }).catch( (ex) => {
+      setLoading(true)
     });
   };
 

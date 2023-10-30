@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Button, Table } from "antd";
 import { useNavigate } from "react-router-dom";
-import {
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { getAll } from "../../service/work.service";
 
 interface Work {

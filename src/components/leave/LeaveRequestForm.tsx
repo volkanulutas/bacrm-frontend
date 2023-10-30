@@ -2,23 +2,7 @@ import React, {  useState } from "react";
 import {Cascader, Divider, DatePicker,  Button, Form, Input, Select } from 'antd';
 import type { SizeType } from 'antd/es/config-provider/SizeContext';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const optionListsLeaveType: Option[] = [
-
   {
     value: 'paidLeave',
     label: 'Ücretli izin',
@@ -31,16 +15,12 @@ const optionListsLeaveType: Option[] = [
   },
 ];
 
-
 interface Option {
   value?: string | number | null;
   label: React.ReactNode;
   children?: Option[];
   isLeaf?: boolean;
 }
-
-
-
 
 const onChange = (value: (string | number)[], selectedOptions: Option[]) => {
   console.log(value, selectedOptions);
@@ -58,9 +38,6 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
-
-
-
 
 const LeaveRequestForm = () => { 
   const childrenOptionFreeLeave = [
@@ -109,9 +86,6 @@ const LeaveRequestForm = () => {
     console.log(values);
   };
 
-
-
-
   const onReset = () => {
     form.resetFields();
   };
@@ -120,66 +94,39 @@ const LeaveRequestForm = () => {
     form.setFieldsValue({ note: 'Hello world!', gender: 'male' });
   };
 	
-
 	return (
     <div>
-     
-
-        <Form
-      {...layout}
-      form={form}
-      name="control-hooks"
-      onFinish={onFinish}
-      style={{ maxWidth: 600 }}
-    >
-     <Divider orientation="center">İzin Girişi
-      </Divider>
-
-      <Form.Item name="leaveStartEndDate" label="İzin Başlangıç Bitiş Tarihi" rules={[{ required: true }]}>
-        <RangePicker size={size} />
-      </Form.Item>
-
-      <Form.Item label="İşe Başlama Tarihi">
-        <DatePicker 
-
-        />
-      </Form.Item>
-    
-        <Form.Item label="Açıklama">
-          <TextArea rows={4} />
+      <Form
+        {...layout}
+        form={form}
+        name="control-hooks"
+        onFinish={onFinish}
+        style={{ maxWidth: 600 }}
+      >
+          <Divider orientation="center">İzin Girişi
+          </Divider>
+          <Form.Item name="leaveStartEndDate" label="İzin Başlangıç Bitiş Tarihi" rules={[{ required: true }]}>
+            <RangePicker size={size} />
+          </Form.Item>
+          <Form.Item label="İşe Başlama Tarihi">
+            <DatePicker />
+          </Form.Item>
+            <Form.Item label="Açıklama">
+              <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item name="leaveType" label="İzin Tipi:" rules={[{ required: true }]}> 
+            <Cascader options={optionsLeaveType} loadData={loadData} onChange={onChange} changeOnSelect />
+          </Form.Item>      
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Onaya Gönder
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+              Temizle
+          </Button>
         </Form.Item>
-         
-        
-      <Form.Item name="leaveType" label="İzin Tipi:" rules={[{ required: true }]}> 
-        <Cascader options={optionsLeaveType} loadData={loadData} onChange={onChange} changeOnSelect />
-      </Form.Item>      
-        
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Onaya Gönder
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          Temizle
-        </Button>
-       
-      </Form.Item>
-
-
-
-
-
-      
-      
-       
-        
- 
-    </Form>
-   
-    
-    
-   
+      </Form>
     </div>
-    
   );
 }
 export default LeaveRequestForm;

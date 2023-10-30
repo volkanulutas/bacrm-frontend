@@ -1,10 +1,8 @@
-import React, { useRef, useState } from "react";
-import type { InputRef } from "antd";
-import { Button, Form, Input, Popconfirm, Table, Space } from "antd";
-import type { FormInstance } from "antd/es/form";
+import React from "react";
+import { Button, Table } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {CheckCircleOutlined,CloseCircleOutlined,QuestionCircleOutlined} from'@ant-design/icons';
+import { useNavigate } from "react-router-dom";
+import {QuestionCircleOutlined} from'@ant-design/icons';
 
 interface DataType {
   id: React.Key;
@@ -108,14 +106,9 @@ const navigateTo = () => {
   navigation("/proposal-detail");
 };
   return (
- 
-
-<div>
+    <div>
       <Table columns={columns} dataSource={data} onChange={onChange} />
     </div>
   );
-
-
-
 };
 export default TimesheetApproveListForm;

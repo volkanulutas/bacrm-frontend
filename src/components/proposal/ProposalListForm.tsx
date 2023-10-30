@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import type { InputRef } from "antd";
-import { Button, Form, Input, Popconfirm, Table, Space } from "antd";
-import type { FormInstance } from "antd/es/form";
+import React, { useEffect, useState } from "react";
+import { Button, Table } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { getAllProposal } from "../../service/proposal.service";
 
 interface Customer {
@@ -139,6 +133,8 @@ const ProposalListForm = () => {
     await getAllProposal().then((res) => {
       setLoading(false);
       setDataSource(res.data);
+    }).catch( (ex) => {
+      setLoading(true)
     });
   };
 

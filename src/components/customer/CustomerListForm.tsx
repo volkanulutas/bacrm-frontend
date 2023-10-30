@@ -103,6 +103,8 @@ const CustomerListForm = () => {
     await getAllCustomer().then((res) => {
       setLoading(false);
       setDataSource(res.data);
+    }).catch( (ex) => {
+      setLoading(true)
     });
   };
 

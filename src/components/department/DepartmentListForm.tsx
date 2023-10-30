@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Button, Table, Modal, Space } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -101,6 +101,8 @@ const DepartmentListForm = () => {
     await getAllDepartment().then((res) => {
       setLoading(false);
       setDataSource(res.data);
+    }).catch( (ex) => {
+      setLoading(true)
     });
   };
 
