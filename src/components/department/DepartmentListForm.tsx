@@ -76,20 +76,24 @@ const DepartmentListForm = () => {
       render: (_, record: { id: React.Key }) =>
         dataSource.length >= 1 ? (
           <div>
-            <Button
-              type="primary"
-              shape="circle"
-              onClick={() => navigateTo(record.id)}
-              icon={<EditOutlined />}
-            ></Button>
             <Space>
-              <Button
-                type="primary"
-                shape="circle"
-                danger
-                icon={<CloseCircleOutlined />}
-                onClick={() => confirm(parseInt(record.id + "", 10))}
-              ></Button>
+              <Space>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  onClick={() => navigateTo(record.id)}
+                  icon={<EditOutlined />}
+                ></Button>
+              </Space>
+              <Space>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  danger
+                  icon={<CloseCircleOutlined />}
+                  onClick={() => confirm(parseInt(record.id + "", 10))}
+                ></Button>
+              </Space>
             </Space>
             {contextHolder}
           </div>

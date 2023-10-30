@@ -1,5 +1,5 @@
 import React, {  useState } from "react";
-import {Cascader, Divider, DatePicker,  Button, Form, Input, Select } from 'antd';
+import {Cascader, Divider, DatePicker,  Button, Form, Input, Select, Space } from 'antd';
 import type { SizeType } from 'antd/es/config-provider/SizeContext';
 
 const optionListsLeaveType: Option[] = [
@@ -106,10 +106,10 @@ const LeaveRequestForm = () => {
           <Divider orientation="center">İzin Girişi
           </Divider>
           <Form.Item name="leaveStartEndDate" label="İzin Başlangıç Bitiş Tarihi" rules={[{ required: true }]}>
-            <RangePicker size={size} />
+            <RangePicker size={size} placeholder={['Başlangıç Tarihi', 'Bitiş Tarihi']} className="bacrm-date-picker" />
           </Form.Item>
           <Form.Item label="İşe Başlama Tarihi">
-            <DatePicker />
+            <DatePicker placeholder="İşe Başlama Tarihi" className="bacrm-date-picker"/>
           </Form.Item>
             <Form.Item label="Açıklama">
               <TextArea rows={4} />
@@ -118,12 +118,16 @@ const LeaveRequestForm = () => {
             <Cascader options={optionsLeaveType} loadData={loadData} onChange={onChange} changeOnSelect />
           </Form.Item>      
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Onaya Gönder
-          </Button>
-          <Button htmlType="button" onClick={onReset}>
-              Temizle
-          </Button>
+            <Space>
+              <Button type="primary" htmlType="submit" className="bacrm-margin-right">
+                Onaya Gönder
+              </Button>
+            </Space>
+            <Space>
+              <Button htmlType="button" onClick={onReset}>
+                Temizle
+             </Button>
+            </Space>
         </Form.Item>
       </Form>
     </div>
