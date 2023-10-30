@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Button, Table, Space, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { QuestionCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { getAllCustomer, deleteCustomer } from "../../service/customer.service";
 
 interface Customer {
@@ -82,7 +82,7 @@ const CustomerListForm = () => {
               type="primary"
               shape="circle"
               onClick={() => navigateTo(record.id)}
-              icon={<QuestionCircleOutlined />}
+              icon={<EditOutlined />}
             ></Button>
             <Space>
               <Button

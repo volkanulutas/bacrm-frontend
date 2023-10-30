@@ -12,3 +12,9 @@ export const getAll = () => {
   return axios.get(API_BASE_URL + API_URL_EMPLOYEE, { headers: authHeader() });
 };
 
+
+export const deleteUser = (id: number) => {
+  return axios.delete(API_BASE_URL + API_URL_EMPLOYEE + id, {
+    headers: authHeader(),
+  });
+};

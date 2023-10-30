@@ -1,15 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Table, Space, Button, Input } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Table, Space, Button, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import type { InputRef } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import moment from "moment";
 
-import { getAll } from "../../service/employee.service";
+import { getAll, deleteUser } from "../../service/employee.service";
 
 interface Department {
   name: string;
@@ -41,8 +40,8 @@ const EmployeeListForm = () => {
   const [dataSource, setDataSource] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [modal, contextHolder] = Modal.useModal();
 
   useEffect(() => {
     getData();
@@ -57,17 +56,29 @@ const EmployeeListForm = () => {
     });
   };
 
+  const deleteConfirm = (id: number) => {
+    modal.confirm({
+      title: "Silme Onayı",
+      icon: <CloseCircleOutlined />,
+      content: "Silmek İstediğinize Emin Misiniz?",
+      okText: "Sil",
+      cancelText: "Vazgeç",
+      onOk: () => {
+        removeUser(id);
+      },
+    });
+  };
+
+  const removeUser = async (id: number) => {
+    await deleteUser(id).then((res) => {
+      setLoading(false);
+      window.location.reload();
+    });
+  };
   const navigateTo = (id: React.Key) => {
     navigation(`/employee-detail/${id}`);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -245,8 +256,18 @@ const EmployeeListForm = () => {
               type="primary"
               shape="circle"
               onClick={() => navigateTo(record.id)}
-              icon={<QuestionCircleOutlined />}
+              icon={<EditOutlined />}
             ></Button>
+              <Space>
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => deleteConfirm(parseInt(record.id + "", 10))}
+              ></Button>
+            </Space>
+            {contextHolder}
           </div>
         ) : null,
     },

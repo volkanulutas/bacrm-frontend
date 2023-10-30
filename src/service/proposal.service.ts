@@ -12,3 +12,9 @@ export const getProposalById = (id: string) => {
     headers: authHeader(),
   });
 };
+
+export const deleteProposal = (id: number) => {
+  return axios.delete(API_BASE_URL + API_URL_PROPOSAL + id, {
+    headers: authHeader(),
+  });
+};

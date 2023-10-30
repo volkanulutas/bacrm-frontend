@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { Button, Table } from "antd";
+import { Button, Table, Space, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { getAll } from "../../service/work.service";
+import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { getAll, deleteWork } from "../../service/work.service";
 
 interface Work {
   id: React.Key;
@@ -26,9 +26,28 @@ const WorkListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modal, contextHolder] = Modal.useModal();
   useEffect(() => {
     getData();
   }, []);
+  const deleteConfirm = (id: number) => {
+    modal.confirm({
+      title: "Silme Onayı",
+      icon: <CloseCircleOutlined />,
+      content: "Silmek İstediğinize Emin Misiniz?",
+      okText: "Sil",
+      cancelText: "Vazgeç",
+      onOk: () => {
+        removeWork(id);
+      },
+    });
+  };
+  const removeWork = async (id: number) => {
+    await deleteWork(id).then((res) => {
+      setLoading(false);
+      window.location.reload();
+    });
+  };
   const columns: ColumnsType<Work> = [
     {
       title: "No",
@@ -102,8 +121,18 @@ const WorkListForm = () => {
               shape="circle"
               onClick={() => navigateTo(record.id)}
 
-              icon={<QuestionCircleOutlined />}
+              icon={<EditOutlined />}
             ></Button>
+             <Space>
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => deleteConfirm(parseInt(record.id + "", 10))}
+              ></Button>
+            </Space>
+            {contextHolder}
           </div>
         ) : null,
     },

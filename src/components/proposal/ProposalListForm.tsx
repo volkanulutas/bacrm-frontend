@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table } from "antd";
+import { Button, Table, Space, Modal } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { getAllProposal } from "../../service/proposal.service";
+import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons"; 
+import { deleteProposal, getAllProposal } from "../../service/proposal.service";
 
 interface Customer {
   id: string;
@@ -38,6 +38,7 @@ const ProposalListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modal, contextHolder] = Modal.useModal();
   useEffect(() => {
     getData();
   }, []);
@@ -122,8 +123,18 @@ const ProposalListForm = () => {
               type="primary"
               shape="circle"
               onClick={() => navigateTo(record.id)}
-              icon={<QuestionCircleOutlined />}
+              icon={<EditOutlined />}
             ></Button>
+            <Space>
+              <Button
+                type="primary"
+                shape="circle"
+                danger
+                icon={<CloseCircleOutlined />}
+                onClick={() => deleteConfirm(parseInt(record.id + "", 10))}
+              ></Button>
+            </Space>
+            {contextHolder}
           </div>
         ) : null,
     },
@@ -135,6 +146,27 @@ const ProposalListForm = () => {
       setDataSource(res.data);
     }).catch( (ex) => {
       setLoading(true)
+    });
+  };
+
+  
+  const deleteConfirm = (id: number) => {
+    modal.confirm({
+      title: "Silme Onayı",
+      icon: <CloseCircleOutlined />,
+      content: "Silmek İstediğinize Emin Misiniz?",
+      okText: "Sil",
+      cancelText: "Vazgeç",
+      onOk: () => {
+        removeProposal(id);
+      },
+    });
+  };
+
+  const removeProposal = async (id: number) => {
+    await deleteProposal(id).then((res) => {
+      setLoading(false);
+      window.location.reload();
     });
   };
 
