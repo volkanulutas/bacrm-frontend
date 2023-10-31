@@ -169,7 +169,7 @@ const EmployeeDetailForm = () => {
             <Input placeholder="Ünvanınızı giriniz." />
           </Form.Item>
           <Form.Item
-            label="Bölüm:"
+            label="Departman:"
             name="department"
             rules={[{ required: true, message: "Depertman seçmelisiniz." }]}
           >
@@ -182,7 +182,7 @@ const EmployeeDetailForm = () => {
             </Select>
           </Form.Item>
           <Form.Item
-            label="Bölüm"
+            label="Departman"
             name={"department"}
             rules={[{ required: true, message: "Depertman girmelisiniz." }]}
           >
