@@ -104,7 +104,6 @@ const DepartmentListForm = () => {
   const getData = async () => {
     await getAllDepartment()
       .then((res) => {
-        alert(JSON.stringify(res.data));
         setLoading(false);
         setDataSource(res.data);
       })

@@ -67,8 +67,6 @@ const CustomerDetailForm = () => {
       telephone: values.telephone,
     };
 
-    alert(JSON.stringify(data));
-
     createCustomer(data).then((res) => {
       setLoading(true);
       setTimeout(() => {

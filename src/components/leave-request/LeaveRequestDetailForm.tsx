@@ -131,7 +131,6 @@ const LeaveRequestDetailForm = () => {
       userId: authUserId(),
       definition: values.definition,
     };
-    alert(JSON.stringify(data));
 
     addLeave(data).then((res) => {
       setLoading(true);

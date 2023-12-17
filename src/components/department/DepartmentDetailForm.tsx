@@ -62,9 +62,7 @@ const DepartmentDetailForm = () => {
         .then((response) => {
           navigate("/department-list", { replace: true });
         })
-        .catch((error) => {
-          alert(error.response.status);
-        });
+        .catch((error) => {});
       setLoading(false);
     }, 500);
   };

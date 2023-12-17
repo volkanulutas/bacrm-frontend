@@ -11,7 +11,6 @@ export const getAllDepartment = () => {
 };
 
 export const createDepartment = (data: any) => {
-  alert(JSON.stringify(data));
   return axios
     .post(API_BASE_URL + API_URL_DEPARTMENT, data, {
       headers: authHeader(),

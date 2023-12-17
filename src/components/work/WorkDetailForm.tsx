@@ -79,7 +79,6 @@ const WorkDetailForm = () => {
       startDate: getMillisDate(values.startDate),
       workloadHour: values.workloadHour,
     };
-    alert(JSON.stringify(data));
     createWork(data).then((res) => {
       setLoading(true);
       setTimeout(() => {

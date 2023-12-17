@@ -22,7 +22,6 @@ export const getPaidLeaveType = () => {
 };
 
 export const addLeave = (data: any) => {
-  alert("sss:" + JSON.stringify(data));
   return axios.post(API_BASE_URL + API_URL_LEAVE, data, {
     headers: authHeader(),
   });

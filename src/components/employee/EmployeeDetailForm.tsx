@@ -88,9 +88,7 @@ const EmployeeDetailForm = () => {
     await getEmployeeById(id).then((res) => {
       setLoading(false);
       const data = res.data;
-      alert("gelen data: " + JSON.stringify(data));
       setItem(data);
-
       form.setFieldsValue({
         id: data.id,
         name: data.name,
@@ -125,7 +123,6 @@ const EmployeeDetailForm = () => {
       birthdate: moment(values.birthdate).valueOf(),
       address: values.address,
     };
-    alert(JSON.stringify(data));
     createEmployee(data).then((res) => {
       setLoading(true);
       setTimeout(() => {
