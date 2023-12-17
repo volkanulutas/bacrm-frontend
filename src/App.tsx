@@ -104,7 +104,7 @@ function App() {
   const items: MenuItem[] = [
     getItem("Çalışanlar", "employee", <UserOutlined />, [
       getItem("Çalışan Listesi", "employee-list"),
-      getItem("Bölümler", "department-list"),
+      getItem("Departman", "department-list"),
     ]),
     getItem("İşler", "work", <PieChartOutlined />, [
       getItem("İş Listesi", "work-list"),

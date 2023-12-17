@@ -57,7 +57,7 @@ const TimesheetApproveListForm = () => {
     },
      
     {
-      title: "Bölüm:",
+      title: "Departman:",
       dataIndex: "department",
       // TODO: sorter: (a, b) => a.date - b.date,
     },

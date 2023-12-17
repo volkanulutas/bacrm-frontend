@@ -52,7 +52,7 @@ const DepartmentListForm = () => {
     },
 
     {
-      title: "Bölüm Adı",
+      title: "Departman Adı",
       dataIndex: "name",
       filterSearch: true,
       width: "10%",
@@ -134,9 +134,9 @@ const DepartmentListForm = () => {
   return (
     <div>
       <Space direction="vertical">
-        <h2>Bölüm Listesi</h2>
+        <h2>Departman Listesi</h2>
         <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
-          Yeni Bölüm Ekle
+          Yeni Departman Ekle
         </Button>
       </Space>
 

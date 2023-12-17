@@ -213,7 +213,7 @@ const EmployeeListForm = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Bölüm",
+      title: "Departman",
       // key: "department",
       dataIndex: "department",
       render: (text, record) => {
