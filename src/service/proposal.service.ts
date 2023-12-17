@@ -3,6 +3,12 @@ import authHeader from "./auth-header";
 import authUserId from "./auth-user-id";
 import { API_BASE_URL, API_URL_PROPOSAL } from "../constants";
 
+export const createProposal = (data: any) => {
+  return axios.post(API_BASE_URL + API_URL_PROPOSAL, data, {
+    headers: authHeader(),
+  });
+};
+
 export const getAllProposal = () => {
   return axios.get(API_BASE_URL + API_URL_PROPOSAL, { headers: authHeader() });
 };

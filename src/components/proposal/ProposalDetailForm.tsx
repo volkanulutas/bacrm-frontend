@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 import { Divider, Select } from "antd";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button, DatePicker, Form, Input, Spin, Space } from "antd";
-import { getProposalById } from "../../service/proposal.service";
+import {
+  getProposalById,
+  createProposal,
+} from "../../service/proposal.service";
 import { getAllCustomer } from "../../service/customer.service";
 
 interface Customer {
@@ -26,19 +29,18 @@ const ProposalDetailForm = () => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm();
   const [customerList, setCustomerList] = useState<Customer[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getData({ id }.id + "").then((res) => {});
     getCustomerData();
+    getData({ id }.id + "").then((res) => {});
   }, [id, form]);
 
   const getCustomerData = async () => {
-    if (id === "-1") {
-      return;
-    }
     setLoading(true);
     await getAllCustomer().then((res) => {
       setCustomerList(res.data);
+      setLoading(false);
     });
   };
 
@@ -56,7 +58,7 @@ const ProposalDetailForm = () => {
         proposalId: data.proposalId,
         definition: data.definition,
         date: moment(data.date),
-        customerName: data.customer.name,
+        customerId: data.customer.name,
         customer: {
           id: data.customer.id,
           name: data.customer.name,
@@ -69,11 +71,22 @@ const ProposalDetailForm = () => {
   };
 
   const onFinish = (values: any) => {
-    setLoading(true);
-    setTimeout(() => {
-      form.resetFields();
-      setLoading(false);
-    }, 500);
+    const data = {
+      id: values.id,
+      proposalId: values.proposalId,
+      customer: customerList.find((obj) => obj.id === values.customerId),
+      date: moment(values.date).valueOf(),
+      definition: values.definition,
+    };
+
+    createProposal(data).then((res) => {
+      setLoading(true);
+      setTimeout(() => {
+        form.resetFields();
+        setLoading(false);
+        navigate("/proposal-list", { replace: true });
+      }, 500);
+    });
   };
 
   return (
@@ -99,52 +112,18 @@ const ProposalDetailForm = () => {
               rules={[{ required: true, message: "Teklif No girmelisiniz." }]}
             >
               <Input
-                placeholder="Teklif No:"
-                disabled={id === "-1" ? false : true}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Müşteri"
-              name={"customerName"}
-              rules={[{ required: true, message: "Müşteri seçmelisiniz." }]}
-            >
-              <Select style={{ width: 200 }} placeholder="Müşteri">
-                {customerList.map((item) => (
-                  <Select.Option key={item.id} value={item.name}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Açıklama"
-              name={"definition"}
-              rules={[{ required: false, message: "Açıklamayı girmelisiniz." }]}
-            >
-              <Input placeholder="Açıklama" />
-            </Form.Item>
-            <Form.Item label="No" name={"id"}>
-              <Input placeholder="No" disabled={true} />
-            </Form.Item>
-            <Form.Item
-              label="Teklif No"
-              name={"proposalId"}
-              rules={[{ required: true, message: "Teklif No girmelisiniz." }]}
-            >
-              <Input
                 placeholder="Teklif No"
                 disabled={id === "-1" ? false : true}
               />
             </Form.Item>
             <Form.Item
               label="Müşteri:"
-              name="customerName"
+              name="customerId"
               rules={[{ required: true, message: "Müşteri seçmelisiniz." }]}
             >
               <Select style={{ width: 200 }} placeholder="Seçiniz">
                 {customerList.map((item: Customer) => (
-                  <Select.Option key={item.id} value={item.name}>
+                  <Select.Option key={item.id} value={item.id}>
                     {item.name}
                   </Select.Option>
                 ))}

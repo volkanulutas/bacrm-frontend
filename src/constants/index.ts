@@ -7,3 +7,4 @@ export const API_URL_DEPARTMENT = "/department/";
 export const API_URL_CUSTOMER = "/customer/";
 export const API_URL_PROPOSAL = "/proposal/";
 export const API_URL_AUTH = "/auth/";
+export const API_URL_LEAVE = "/leave/";

@@ -1,9 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../../styles.css";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import moment, { Moment } from "moment";
 import { useParams } from "react-router-dom";
-import { getEmployeeById } from "../../service/employee.service";
+import {
+  getEmployeeById,
+  createEmployee,
+} from "../../service/employee.service";
 import { getAllDepartment } from "../../service/department.service";
 
 import {
@@ -56,6 +60,7 @@ const EmployeeDetailForm = () => {
 
   const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<Employee>();
+  const navigate = useNavigate();
   const [item, setItem] = useState<Employee>();
 
   useEffect(() => {
@@ -64,9 +69,6 @@ const EmployeeDetailForm = () => {
   }, [id, form]);
 
   const getDepartmentData = async () => {
-    if (id === "-1") {
-      return;
-    }
     setLoading(true);
     await getAllDepartment().then((res) => {
       setLoading(false);
@@ -115,12 +117,28 @@ const EmployeeDetailForm = () => {
     });
   };
   const onFinish = (values: any) => {
-    // make api call
-    setLoading(true);
-    setTimeout(() => {
-      form.resetFields();
-      setLoading(false);
-    }, 500);
+    const data = {
+      id: values.id,
+      name: values.name,
+      middleName: values.middleName,
+      title: values.title,
+      department: values.department.name,
+      cellPhone: values.cellPhone,
+      internalPhone: values.internalPhone,
+      email: values.email,
+      startDate: moment(values.startDate),
+      birthdate: moment(values.birthdate),
+      address: values.address,
+    };
+    alert(JSON.stringify(data));
+    createEmployee(data).then((res) => {
+      setLoading(true);
+      setTimeout(() => {
+        form.resetFields();
+        setLoading(false);
+        navigate("/employee-list", { replace: true });
+      }, 500);
+    });
   };
 
   return (

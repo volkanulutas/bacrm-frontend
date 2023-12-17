@@ -49,7 +49,9 @@ const WorkDetailForm = () => {
   }, [id, form]);
 
   const getData = async (id: string) => {
-    if(id === "-1"){return;}
+    if (id === "-1") {
+      return;
+    }
     setLoading(true);
     await getWorkById(id).then((res) => {
       setLoading(false);
@@ -75,9 +77,9 @@ const WorkDetailForm = () => {
       name: values.name,
       planningDate: getMillisDate(values.planningDate),
       startDate: getMillisDate(values.startDate),
-      workloadHour: values.workLoadHour,
+      workloadHour: values.workloadHour,
     };
-
+    alert(JSON.stringify(data));
     createWork(data).then((res) => {
       setLoading(true);
       setTimeout(() => {

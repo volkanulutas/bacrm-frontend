@@ -3,7 +3,7 @@ import MainRoutes from "./Routes";
 import HeaderMenu from "./components/elements/HeaderMenu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as AuthService from "./service/auth.service";
-import IUser from './types/user.type';
+import IUser from "./types/user.type";
 import {
   Breadcrumb,
   Tooltip,
@@ -47,7 +47,7 @@ function getItem(
     icon,
     children,
     label,
-    type
+    type,
   } as MenuItem;
 }
 
@@ -110,16 +110,16 @@ function App() {
       getItem("İş Listesi", "work-list"),
       getItem("İşçilik Girişi", "timesheet"),
     ]),
-  
+
     getItem("İzinler", "leaves", <AppstoreOutlined />, [
-      getItem("İzin Talep Formu", "leave-form"),
+      getItem("İzin Taleplerim", "leave-request-list"),
+      getItem("İzin Talep Formu", "leave-request-detail/-1"),
       getItem("İzin Onay Formu", "leave-approve-form"),
-     
     ]),
     getItem("Teklifler", "proposal", <DesktopOutlined />, [
-      ( {showAdminBoard}? getItem("Teklif Listesi", "proposal-list") : null ),
+      { showAdminBoard } ? getItem("Teklif Listesi", "proposal-list") : null,
       getItem("Müşteriler", "customer-list"),
-    ])
+    ]),
   ];
 
   const logOut = () => {
@@ -128,7 +128,6 @@ function App() {
     setShowAdminBoard(false);
     setCurrentUser(undefined);
   };
-
 
   const {
     token: { colorBgContainer },
@@ -157,7 +156,7 @@ function App() {
                 </Menu.Item>
 
                 {!currentUser ? (
-                    <Menu.Item key="login">
+                  <Menu.Item key="login">
                     <Tooltip title="Login">
                       <Button
                         type="link"
@@ -167,17 +166,18 @@ function App() {
                       />
                     </Tooltip>
                   </Menu.Item>
-                ): ( 
-                <Menu.Item key="logout">
-                  <Tooltip title="Çıkış Yap">
-                    <Button
-                      type="link"
-                      shape="circle"
-                      icon={<LogoutOutlined />}
-                      href="/logout"
-                    />
-                  </Tooltip>
-                </Menu.Item>)}
+                ) : (
+                  <Menu.Item key="logout">
+                    <Tooltip title="Çıkış Yap">
+                      <Button
+                        type="link"
+                        shape="circle"
+                        icon={<LogoutOutlined />}
+                        href="/logout"
+                      />
+                    </Tooltip>
+                  </Menu.Item>
+                )}
                 <Menu.Item>
                   <Switch
                     checked={themeLcl === "dark"}

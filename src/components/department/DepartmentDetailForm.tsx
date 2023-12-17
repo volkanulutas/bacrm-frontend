@@ -46,7 +46,6 @@ const DepartmentDetailForm = () => {
       setLoading(false);
       const data = res.data;
       setItem(data);
-      alert(JSON.stringify(data));
       form.setFieldsValue({
         id: data.id,
         name: data.name,
@@ -89,9 +88,7 @@ const DepartmentDetailForm = () => {
           <Form.Item
             label="Bölüm Adı"
             name={"name"}
-            rules={[
-              { required: true, message: "Bölüm Adını girmelisiniz." },
-            ]}
+            rules={[{ required: true, message: "Bölüm Adını girmelisiniz." }]}
           >
             <Input placeholder="Bölüm Adı" />
           </Form.Item>

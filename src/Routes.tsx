@@ -23,24 +23,25 @@ import PermissionDenied from "./components/elements/PermissionDenied";
 import ProposalFormList from "./components/proposal/ProposalListForm";
 import ProposalDetailForm from "./components/proposal/ProposalDetailForm";
 import LeaveApproveForm from "./components/leave/LeaveApproveForm";
-import LeaveForm from "./components/leave/LeaveRequestForm";
+import LeaveRequestDetailForm from "./components/leave-request/LeaveRequestDetailForm";
 import EmployeeListForm from "./components/employee/EmployeeListForm";
 import EmployeeDetailForm from "./components/employee/EmployeeDetailForm";
 import WorkListForm from "./components/work/WorkListForm";
 import WorkDetailForm from "./components/work/WorkDetailForm";
 
 import CustomerListForm from "./components/customer/CustomerListForm";
-import CustomerDetailForm  from "./components/customer/CustomerDetailForm";
+import CustomerDetailForm from "./components/customer/CustomerDetailForm";
 
 import DepartmentListForm from "./components/department/DepartmentListForm";
-import DepartmentDetailForm  from "./components/department/DepartmentDetailForm";
+import DepartmentDetailForm from "./components/department/DepartmentDetailForm";
+import LeaveRequestListForm from "./components/leave-request/LeaveRequestListForm";
 
 const MainRoutes = () => (
   <Routes>
     {/** Protected Routes */}
     {/** Wrap all Route under ProtectedRoutes element */}
-     <Route path="/" element={<ProtectedRoutes />}> 
-        <Route path="/" element={<InnerContent />}>
+    <Route path="/" element={<ProtectedRoutes />}>
+      <Route path="/" element={<InnerContent />}>
         <Route path="/" element={<Navigate replace to="dashboard" />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route
@@ -55,8 +56,15 @@ const MainRoutes = () => (
           <Route path="tab3" element={<Tab3 />} />
         </Route>
         <Route path="timesheet" element={<Timesheet />} />
-        <Route path="timesheet-approve-list-form" element={<TimesheetApproveListForm />} />
-        <Route path="leave-form" element={<LeaveForm />} />
+        <Route
+          path="timesheet-approve-list-form"
+          element={<TimesheetApproveListForm />}
+        />
+        <Route
+          path="leave-request-detail/:id"
+          element={<LeaveRequestDetailForm />}
+        />
+        <Route path="leave-request-list" element={<LeaveRequestListForm />} />
         <Route path="leave-approve-form" element={<LeaveApproveForm />} />
         <Route path="proposal-list" element={<ProposalFormList />} />
         <Route path="proposal-detail/:id" element={<ProposalDetailForm />} />
@@ -68,7 +76,10 @@ const MainRoutes = () => (
         <Route path="customer-list" element={<CustomerListForm />} />
         <Route path="customer-detail/:id" element={<CustomerDetailForm />} />
         <Route path="department-list" element={<DepartmentListForm />} />
-        <Route path="department-detail/:id" element={<DepartmentDetailForm />} />
+        <Route
+          path="department-detail/:id"
+          element={<DepartmentDetailForm />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route
@@ -77,9 +88,7 @@ const MainRoutes = () => (
         />
         <Route path="users/:userId" element={<SingleUser />} />
         <Route path="users/new" element={<NewUser />} />
-
-      
-    </Route> 
+      </Route>
     </Route>
 
     {/** Public Routes */}
@@ -88,12 +97,12 @@ const MainRoutes = () => (
     <Route path="login" element={<PublicRoutes />}>
       <Route path="/login" element={<Login />} />
     </Route>
-    */ }
+    */}
     {/**
     <Route path="login" element={<PublicRoutes />}>
       <Route path="/login" element={<Login />} />
     </Route>
-    */ }
+    */}
     {/** Permission denied route */}
     <Route path="/denied" element={<PermissionDenied />} />
   </Routes>

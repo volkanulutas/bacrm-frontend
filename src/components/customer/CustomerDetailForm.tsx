@@ -2,25 +2,19 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
+import { Button, Form, Input, Divider, Spin, Space } from "antd";
 import {
-  Button,
-  Form,
-  Input,
-  Divider,
-  Spin,
-  Space,
-} from "antd";
-import { getCustomerById, createCustomer } from "../../service/customer.service";
+  getCustomerById,
+  createCustomer,
+} from "../../service/customer.service";
 const { TextArea } = Input;
 
-interface Work {
+interface Customer {
   id: string;
   name: string;
   definition: string;
-  workloadHour: number;
-  endDate: number;
-  startDate: number;
-  planningDate: number;
+  address: string;
+  telephone: number;
 }
 
 export const getMillisDate = (dateStr: string): number => {
@@ -39,14 +33,16 @@ const CustomerDetailForm = () => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false); // TODO: role integratiob should be done.
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [item, setItem] = useState<Work>();
+  const [item, setItem] = useState<Customer>();
 
   useEffect(() => {
     getData({ id }.id + "").then((res) => {});
   }, [id, form]);
 
   const getData = async (id: string) => {
-    if(id === "-1"){return;}
+    if (id === "-1") {
+      return;
+    }
     setLoading(true);
     await getCustomerById(id).then((res) => {
       setLoading(false);
@@ -65,13 +61,13 @@ const CustomerDetailForm = () => {
   const onFinish = (values: any) => {
     const data = {
       id: values.id,
-      definition: values.definition,
-      endDate: getMillisDate(values.endDate),
       name: values.name,
-      planningDate: getMillisDate(values.planningDate),
-      startDate: getMillisDate(values.startDate),
-      workloadHour: values.workLoadHour,
+      definition: values.definition,
+      address: values.address,
+      telephone: values.telephone,
     };
+
+    alert(JSON.stringify(data));
 
     createCustomer(data).then((res) => {
       setLoading(true);
@@ -110,7 +106,10 @@ const CustomerDetailForm = () => {
             label="Müşteri Açıklaması"
             name={"definition"}
             rules={[
-              { required: false, message: "Müşteri Açıklamasını girmelisiniz." },
+              {
+                required: false,
+                message: "Müşteri Açıklamasını girmelisiniz.",
+              },
             ]}
           >
             <Input placeholder="Müşteri Açıklaması" />
@@ -119,7 +118,9 @@ const CustomerDetailForm = () => {
           <Form.Item
             label="Müşteri Adresi"
             name={"address"}
-            rules={[{ required: true, message: "Müşteri Adresini girmelisiniz." }]}
+            rules={[
+              { required: true, message: "Müşteri Adresini girmelisiniz." },
+            ]}
           >
             <Input placeholder="Müşteri Adresi" />
           </Form.Item>
@@ -132,7 +133,7 @@ const CustomerDetailForm = () => {
           >
             <Input placeholder="Müşteri Telefonu" />
           </Form.Item>
-        
+
           <Space direction="horizontal" size={12}>
             <Button
               htmlType="submit"
