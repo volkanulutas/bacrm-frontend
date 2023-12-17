@@ -102,12 +102,15 @@ const DepartmentListForm = () => {
   ];
 
   const getData = async () => {
-    await getAllDepartment().then((res) => {
-      setLoading(false);
-      setDataSource(res.data);
-    }).catch( (ex) => {
-      setLoading(true)
-    });
+    await getAllDepartment()
+      .then((res) => {
+        alert(JSON.stringify(res.data));
+        setLoading(false);
+        setDataSource(res.data);
+      })
+      .catch((ex) => {
+        setLoading(true);
+      });
   };
 
   const removeDepartment = async (id: number) => {
@@ -135,7 +138,11 @@ const DepartmentListForm = () => {
     <div>
       <Space direction="vertical">
         <h2>Departman Listesi</h2>
-        <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
+        <Button
+          type="primary"
+          onClick={() => navigateTo(-1)}
+          className="bacrm-margin-bottom"
+        >
           Yeni Departman Ekle
         </Button>
       </Space>

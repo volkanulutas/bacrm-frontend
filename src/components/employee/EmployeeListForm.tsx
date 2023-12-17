@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Table, Space, Button, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { SearchOutlined, CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import type { InputRef } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
@@ -9,6 +13,7 @@ import type { FilterConfirmProps } from "antd/es/table/interface";
 import moment from "moment";
 
 import { getAll, deleteUser } from "../../service/employee.service";
+import { getAllDepartment } from "../../service/department.service";
 
 interface Department {
   name: string;
@@ -48,12 +53,14 @@ const EmployeeListForm = () => {
   }, []);
 
   const getData = async () => {
-    await getAll().then((res) => {
-      setLoading(false);
-      setDataSource(res.data);
-    }).catch( (ex) => {
-      setLoading(true)
-    });
+    await getAll()
+      .then((res) => {
+        setLoading(false);
+        setDataSource(res.data);
+      })
+      .catch((ex) => {
+        setLoading(true);
+      });
   };
 
   const deleteConfirm = (id: number) => {
@@ -192,13 +199,26 @@ const EmployeeListForm = () => {
       width: "5%",
     },
     {
-      title: "Çalışan Adı",
-      dataIndex: "employeeName",
+      title: "İsim",
+      dataIndex: "name",
       // key: 'name',
-      width: "30%",
+      width: "10%",
       render: (text, record) => {
         const middleName = (record.middleName ? record.middleName : "") + " ";
-        return record.name + " " + middleName + record.surname;
+        return record.name + " " + middleName;
+      },
+      //...getColumnSearchProps('employeeName'),
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "Soyisim",
+      dataIndex: "surname",
+      // key: 'name',
+      width: "10%",
+      render: (text, record) => {
+        const middleName = (record.middleName ? record.middleName : "") + " ";
+        return record.name + " " + middleName;
       },
       //...getColumnSearchProps('employeeName'),
       sorter: (a, b) => a.name.localeCompare(b.name),
@@ -280,10 +300,14 @@ const EmployeeListForm = () => {
     <div>
       <Space direction="vertical">
         <h2>Çalışanlar</h2>
-        <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
+        <Button
+          type="primary"
+          onClick={() => navigateTo(-1)}
+          className="bacrm-margin-bottom"
+        >
           Yeni Çalışan Ekle
-        </Button>   
-        </Space>
+        </Button>
+      </Space>
       <Table columns={columns} dataSource={dataSource} />
     </div>
   );

@@ -35,6 +35,8 @@ const normFile = (e: any) => {
 interface Department {
   id: string;
   name: string;
+  description: string;
+  deleted: boolean;
 }
 
 interface Employee {
@@ -46,6 +48,7 @@ interface Employee {
   title: string;
   department: Department;
   email: string;
+  password: string;
   cellPhone: string;
   internalPhone: string;
   startDate: Moment;
@@ -73,21 +76,7 @@ const EmployeeDetailForm = () => {
     await getAllDepartment().then((res) => {
       setLoading(false);
       const data = res.data;
-      setItem(data);
-
-      form.setFieldsValue({
-        id: data.id,
-        name: data.name,
-        middleName: data.middleName,
-        title: data.title,
-        department: data?.department?.name,
-        cellPhone: data.cellPhone,
-        internalPhone: data.internalPhone,
-        email: data.email,
-        startDate: moment(data.startDate),
-        birthdate: moment(data.birthdate),
-        address: data.address,
-      });
+      setDepartmentList(data);
     });
   };
 
@@ -99,11 +88,13 @@ const EmployeeDetailForm = () => {
     await getEmployeeById(id).then((res) => {
       setLoading(false);
       const data = res.data;
+      alert("gelen data: " + JSON.stringify(data));
       setItem(data);
 
       form.setFieldsValue({
         id: data.id,
         name: data.name,
+        surname: data.surname,
         middleName: data.middleName,
         title: data.title,
         department: data.department.name,
@@ -120,14 +111,18 @@ const EmployeeDetailForm = () => {
     const data = {
       id: values.id,
       name: values.name,
+      surname: values.surname,
       middleName: values.middleName,
       title: values.title,
-      department: values.department.name,
+      department: departmentList.find(
+        (dept) => dept.name === values.department
+      ),
       cellPhone: values.cellPhone,
       internalPhone: values.internalPhone,
       email: values.email,
-      startDate: moment(values.startDate),
-      birthdate: moment(values.birthdate),
+      password: values.password,
+      startDate: moment(values.startDate).valueOf(),
+      birthdate: moment(values.birthdate).valueOf(),
       address: values.address,
     };
     alert(JSON.stringify(data));
@@ -160,24 +155,18 @@ const EmployeeDetailForm = () => {
           form={form}
         >
           <Form.Item
-            label="Profil"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload action="/upload.do" listType="picture-card">
-              <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            </Upload>
-          </Form.Item>
-
-          <Form.Item
-            label="Ad Soyad"
+            label="İsim"
             name={"name"}
-            rules={[{ required: true, message: "Ad Soyad girmelisiniz." }]}
+            rules={[{ required: true, message: "İsim girmelisiniz." }]}
           >
-            <Input placeholder="Ad Soyad giriniz." />
+            <Input placeholder="İsim giriniz." />
+          </Form.Item>
+          <Form.Item
+            label="Soyisim"
+            name={"surname"}
+            rules={[{ required: true, message: "Soyisim girmelisiniz." }]}
+          >
+            <Input placeholder="Soyisim giriniz." />
           </Form.Item>
           <Form.Item
             label="Ünvan"
@@ -187,26 +176,25 @@ const EmployeeDetailForm = () => {
             <Input placeholder="Ünvanınızı giriniz." />
           </Form.Item>
           <Form.Item
+            label="Şifre"
+            name={"password"}
+            rules={[{ required: true, message: "Şifre girmelisiniz." }]}
+          >
+            <Input placeholder="Şifre giriniz." />
+          </Form.Item>
+          <Form.Item
             label="Departman:"
             name="department"
             rules={[{ required: true, message: "Depertman seçmelisiniz." }]}
           >
             <Select style={{ width: 200 }} placeholder="Seçiniz">
               {departmentList.map((item: Department) => (
-                <Select.Option key={item.id} value={item.name}>
+                <Select.Option key={item.id} value={item.id}>
                   {item.name}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Departman"
-            name={"department"}
-            rules={[{ required: true, message: "Depertman girmelisiniz." }]}
-          >
-            <Input placeholder="Depertmanınızı giriniz." />
-          </Form.Item>
-
           <Form.Item
             label="Cep Telefonu"
             name={"cellPhone"}
