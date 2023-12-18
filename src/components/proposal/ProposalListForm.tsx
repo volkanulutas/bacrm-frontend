@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Button, Table, Space, Modal } from "antd";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Table, Space, Modal, Input, InputRef } from "antd";
+import type { ColumnsType, TableProps, ColumnType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons"; 
+import {
+  EditOutlined,
+  CloseCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import type { FilterConfirmProps } from "antd/es/table/interface";
+import moment from "moment";
+import Highlighter from "react-highlight-words";
 import { deleteProposal, getAllProposal } from "../../service/proposal.service";
 
 interface Customer {
@@ -25,6 +32,8 @@ interface Department {
   name: string;
 }
 
+type DataIndex = keyof Proposal;
+
 const onChange: TableProps<Proposal>["onChange"] = (
   pagination,
   filters,
@@ -39,26 +48,125 @@ const ProposalListForm = () => {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, contextHolder] = Modal.useModal();
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef<InputRef>(null);
   useEffect(() => {
     getData();
   }, []);
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: (param?: FilterConfirmProps) => void,
+    dataIndex: DataIndex
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (
+    dataIndex: DataIndex
+  ): ColumnType<Proposal> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Arama
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Temizle
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filtrele
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            Kapat
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
   const columns: ColumnsType<Proposal> = [
     {
       title: "Teklif No:",
       dataIndex: "proposalId",
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-      onFilter: (value: any, record) => record.proposalId.startsWith(value),
-      filterSearch: true,
-      width: "40%",
+      ...getColumnSearchProps("proposalId"),
+      width: "20%",
     },
     {
       title: "Müşteri Adı",
@@ -66,51 +174,20 @@ const ProposalListForm = () => {
       render: (text, record) => {
         return record.customer.name;
       },
-      filters: [
-        {
-          text: "Arel Üniversite Satın Alma Birimi",
-          value: "Arel Üniversite Satın Alma Birimi",
-        },
-        {
-          text: "Category 1",
-          value: "Category 1",
-        },
-        {
-          text: "Category 2",
-          value: "Category 2",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value: any, record) => record.customer.name.startsWith(value),
+      // ...getColumnSearchProps("record.customer.name"),
       width: "30%",
     },
     {
       title: "Açıklama",
       dataIndex: "definition",
-      filters: [
-        {
-          text: "Arel Üniversite Satın Alma Birimi",
-          value: "Arel Üniversite Satın Alma Birimi",
-        },
-        {
-          text: "Category 1",
-          value: "Category 1",
-        },
-        {
-          text: "Category 2",
-          value: "Category 2",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value: any, record) => record.customer.name.startsWith(value),
-      width: "30%",
+      width: "50%",
     },
     {
       title: "Teklif Tarihi:",
       dataIndex: "date",
-      // TODO: sorter: (a, b) => a.date - b.date,
+      render: (date: number) => moment(date).format("DD/MM/YYYY HH:mm:ss"),
+      sorter: (a, b) => a.date - b.date,
+      sortDirections: ["descend", "ascend"],
     },
 
     {
@@ -145,15 +222,16 @@ const ProposalListForm = () => {
   ];
 
   const getData = async () => {
-    await getAllProposal().then((res) => {
-      setLoading(false);
-      setDataSource(res.data);
-    }).catch( (ex) => {
-      setLoading(true)
-    });
+    await getAllProposal()
+      .then((res) => {
+        setLoading(false);
+        setDataSource(res.data);
+      })
+      .catch((ex) => {
+        setLoading(true);
+      });
   };
 
-  
   const deleteConfirm = (id: number) => {
     modal.confirm({
       title: "Silme Onayı",
@@ -181,7 +259,11 @@ const ProposalListForm = () => {
     <div>
       <Space direction="vertical">
         <h2>Teklif Listesi</h2>
-        <Button type="primary" onClick={() => navigateTo(-1)} className="bacrm-margin-bottom">
+        <Button
+          type="primary"
+          onClick={() => navigateTo(-1)}
+          className="bacrm-margin-bottom"
+        >
           Yeni Teklif Ekle
         </Button>
       </Space>

@@ -133,14 +133,14 @@ const EmployeeListForm = () => {
             size="small"
             style={{ width: 90 }}
           >
-            Search
+            Arama
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
             style={{ width: 90 }}
           >
-            Reset
+            Temizle
           </Button>
           <Button
             type="link"
@@ -151,7 +151,7 @@ const EmployeeListForm = () => {
               setSearchedColumn(dataIndex);
             }}
           >
-            Filter
+            Filtrele
           </Button>
           <Button
             type="link"
@@ -160,7 +160,7 @@ const EmployeeListForm = () => {
               close();
             }}
           >
-            close
+            Kapat
           </Button>
         </Space>
       </div>
@@ -217,8 +217,7 @@ const EmployeeListForm = () => {
       // key: 'name',
       width: "10%",
       render: (text, record) => {
-        const middleName = (record.middleName ? record.middleName : "") + " ";
-        return record.name + " " + middleName;
+        return record.surname;
       },
       //...getColumnSearchProps('employeeName'),
       sorter: (a, b) => a.name.localeCompare(b.name),
@@ -254,7 +253,6 @@ const EmployeeListForm = () => {
       title: "Telefon",
       dataIndex: "cellPhone",
       key: "cellPhone",
-      ...getColumnSearchProps("telephoneNumber"),
     },
     {
       title: "İşe Giriş Tarihi",

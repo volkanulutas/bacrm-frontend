@@ -152,7 +152,12 @@ function App() {
             <div>
               <Menu theme="dark" mode="horizontal">
                 <Menu.Item>
-                  <Image width={32} height={32} src="logo192.png"></Image>
+                  <Image
+                    width={60}
+                    height={20}
+                    src="logo.png"
+                    preview={{ visible: false }}
+                  ></Image>
                 </Menu.Item>
 
                 {!currentUser ? (
@@ -185,6 +190,16 @@ function App() {
                     checkedChildren="Dark"
                     unCheckedChildren="Light"
                   />
+                </Menu.Item>
+                <Menu.Item>
+                  <Tooltip title="E-posta">
+                    <Button
+                      type="link"
+                      shape="circle"
+                      icon={<MailOutlined />}
+                      href="http://www.basaglikyapilari.com/mail"
+                    />
+                  </Tooltip>
                 </Menu.Item>
               </Menu>
             </div>

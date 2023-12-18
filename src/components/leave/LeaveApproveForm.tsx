@@ -1,42 +1,39 @@
 import React, { useRef, useState } from "react";
-import {Divider,Table,Space,Button, Input,Modal } from 'antd';
-import {CheckCircleOutlined,CloseCircleOutlined} from'@ant-design/icons';
-import { SearchOutlined } from '@ant-design/icons';
-import Highlighter from 'react-highlight-words';
-import type { InputRef } from 'antd';
-import type { ColumnType, ColumnsType } from 'antd/es/table';
-import type { FilterConfirmProps } from 'antd/es/table/interface';
+import { Divider, Table, Space, Button, Input, Modal } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
+import type { InputRef } from "antd";
+import type { ColumnType, ColumnsType } from "antd/es/table";
+import type { FilterConfirmProps } from "antd/es/table/interface";
 
 interface DataType {
   key: string;
   employeeName: string;
   leaveType: string;
-  leaveStartDate:number;
-  leaveEndDate:number;
-  workStartDate:number;
-  
+  leaveStartDate: number;
+  leaveEndDate: number;
+  workStartDate: number;
 }
 type DataIndex = keyof DataType;
 
 const data: DataType[] = [
   {
-    key: '1',
-    employeeName: 'Derya Taş',
-    leaveType:'Yıllık izin', 
-    leaveStartDate:1694979873986,
+    key: "1",
+    employeeName: "Derya Taş",
+    leaveType: "Yıllık izin",
+    leaveStartDate: 1694979873986,
     leaveEndDate: 16949798738986,
-    workStartDate:1694979873956,
-    
+    workStartDate: 1694979873956,
   },
   {
-    key: '2',
-    employeeName: 'Volkan Ulutaş',
-    leaveType: 'Mazeret izni',
-    leaveStartDate:1594979873986,
+    key: "2",
+    employeeName: "Volkan Ulutaş",
+    leaveType: "Mazeret izni",
+    leaveStartDate: 1594979873986,
     leaveEndDate: 1594979873986,
-    workStartDate:1594979873986,
+    workStartDate: 1594979873986,
   },
-  
 ];
 
 export const getFullDate = (dateNum: number): string => {
@@ -44,12 +41,9 @@ export const getFullDate = (dateNum: number): string => {
   return date.toDateString();
 };
 
-
 const LeaveApproveForm = () => {
-  
-	
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -67,7 +61,7 @@ const LeaveApproveForm = () => {
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
-    dataIndex: DataIndex,
+    dataIndex: DataIndex
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -76,36 +70,50 @@ const LeaveApproveForm = () => {
 
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
-    setSearchText('');
+    setSearchText("");
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+  const getColumnSearchProps = (
+    dataIndex: DataIndex
+  ): ColumnType<DataType> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
         />
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}
           >
-            Search
+            Arama
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
             style={{ width: 90 }}
           >
-            Reset
+            Temizle
           </Button>
           <Button
             type="link"
@@ -116,7 +124,7 @@ const LeaveApproveForm = () => {
               setSearchedColumn(dataIndex);
             }}
           >
-            Filter
+            Filtrele
           </Button>
           <Button
             type="link"
@@ -125,13 +133,13 @@ const LeaveApproveForm = () => {
               close();
             }}
           >
-            close
+            Kapat
           </Button>
         </Space>
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -146,10 +154,10 @@ const LeaveApproveForm = () => {
     render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ''}
+          textToHighlight={text ? text.toString() : ""}
         />
       ) : (
         text
@@ -158,62 +166,71 @@ const LeaveApproveForm = () => {
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'Çalışan Adı',
-      dataIndex: 'employeeName',
-      key: 'employeeName',
-      width: '30%',
-      ...getColumnSearchProps('employeeName'),
+      title: "Çalışan Adı",
+      dataIndex: "employeeName",
+      key: "employeeName",
+      width: "30%",
+      ...getColumnSearchProps("employeeName"),
     },
     {
-      title: 'İzin Tipi',
-      dataIndex: 'leaveType',
-      key: 'leaveType',
-      width: '20%',
-      ...getColumnSearchProps('leaveType'),
+      title: "İzin Tipi",
+      dataIndex: "leaveType",
+      key: "leaveType",
+      width: "20%",
+      ...getColumnSearchProps("leaveType"),
     },
     {
-      title: 'Başlangıç Tarihi',
-      dataIndex: 'leaveStartDate',
-      key: 'leaveStartDate',
-      ...getColumnSearchProps('leaveStartDate'),
-      render:((date:number) => getFullDate(date)),
-      sorter: (a,b) => a.leaveStartDate-b.leaveStartDate,
-      sortDirections: ['descend', 'ascend'],
+      title: "Başlangıç Tarihi",
+      dataIndex: "leaveStartDate",
+      key: "leaveStartDate",
+      ...getColumnSearchProps("leaveStartDate"),
+      render: (date: number) => getFullDate(date),
+      sorter: (a, b) => a.leaveStartDate - b.leaveStartDate,
+      sortDirections: ["descend", "ascend"],
     },
     {
-      title: 'Bitiş Tarihi',
-      dataIndex: 'leaveEndDate',
-      key: 'leaveEndDate',
-      ...getColumnSearchProps('leaveEndDate'),
-      render:((date:number) => getFullDate(date)),
-      sorter: (a,b) => a.leaveEndDate-b.leaveEndDate,
-      
-      sortDirections: ['descend', 'ascend'],
+      title: "Bitiş Tarihi",
+      dataIndex: "leaveEndDate",
+      key: "leaveEndDate",
+      ...getColumnSearchProps("leaveEndDate"),
+      render: (date: number) => getFullDate(date),
+      sorter: (a, b) => a.leaveEndDate - b.leaveEndDate,
+
+      sortDirections: ["descend", "ascend"],
     },
 
-    
-  
     {
-      title: 'İşe Başlama Tarihi',
-      dataIndex: 'workStartDate',
-      key: 'workStartDate',
-      ...getColumnSearchProps('workStartDate'),
-      render:((date:number) => getFullDate(date)),
-      sorter: (a,b) => a.workStartDate-b.workStartDate,
-      sortDirections: ['descend', 'ascend'],
+      title: "İşe Başlama Tarihi",
+      dataIndex: "workStartDate",
+      key: "workStartDate",
+      ...getColumnSearchProps("workStartDate"),
+      render: (date: number) => getFullDate(date),
+      sorter: (a, b) => a.workStartDate - b.workStartDate,
+      sortDirections: ["descend", "ascend"],
     },
     {
-      title: 'İşlem',
-      dataIndex: 'action',
+      title: "İşlem",
+      dataIndex: "action",
       render: (_, record: { key: React.Key }) =>
         data.length >= 1 ? (
           <div>
             <Space>
               <Space>
-                <Button type="primary"  className="marginright" shape="circle" icon={< CheckCircleOutlined/>}></Button>
+                <Button
+                  type="primary"
+                  className="marginright"
+                  shape="circle"
+                  icon={<CheckCircleOutlined />}
+                ></Button>
               </Space>
               <Space>
-                <Button type="primary" danger shape="circle" onClick={showModal} icon={< CloseCircleOutlined/>}></Button>
+                <Button
+                  type="primary"
+                  danger
+                  shape="circle"
+                  onClick={showModal}
+                  icon={<CloseCircleOutlined />}
+                ></Button>
               </Space>
             </Space>
           </div>
@@ -221,28 +238,24 @@ const LeaveApproveForm = () => {
     },
   ];
 
-	return (
+  return (
     <div>
       <Space direction="vertical">
         <h2>İzin Onay Formu</h2>
-        <Divider orientation="center">İzin Talepleri
-        </Divider>
+        <Divider orientation="center">İzin Talepleri</Divider>
       </Space>
       <Table columns={columns} dataSource={data} />
-      <Modal title="Red Nedeni" cancelButtonProps={{ style: { display: 'none' } }}  okText="Reddet" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="Red Nedeni"
+        cancelButtonProps={{ style: { display: "none" } }}
+        okText="Reddet"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
         <Input></Input>
       </Modal>
     </div>
   );
-}
+};
 export default LeaveApproveForm;
-
-
-
-
-
-
-
-
-
-

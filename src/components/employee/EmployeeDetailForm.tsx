@@ -255,7 +255,7 @@ const EmployeeDetailForm = () => {
               type="primary"
               style={{ marginBottom: 16 }}
             >
-              Reset
+              İptal
             </Button>
           </Space>
         </Form>
