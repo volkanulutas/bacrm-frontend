@@ -79,6 +79,9 @@ const WorkListForm = () => {
       dataIndex: "workloadHour",
       filterSearch: true,
       width: "10%",
+      render: (text, record) => {
+        return record.workloadHour + " saat";
+      },
       // TODO:    ...getColumnSearchProps('status'),
       sorter: (a, b) => a.workloadHour - b.workloadHour,
       sortDirections: ["descend", "ascend"],
@@ -116,26 +119,26 @@ const WorkListForm = () => {
       render: (_, record: { id: React.Key }) =>
         dataSource.length >= 1 ? (
           <div>
-          <Space>
             <Space>
-              <Button
-                type="primary" 
-                shape="circle"
-                onClick={() => navigateTo(record.id)}
-                icon={<EditOutlined />}
+              <Space>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  onClick={() => navigateTo(record.id)}
+                  icon={<EditOutlined />}
                 ></Button>
-            </Space>
-            <Space>
-              <Button
-                type="primary"
-                shape="circle"
-                danger
-                icon={<CloseCircleOutlined />}
-                onClick={() => deleteConfirm(parseInt(record.id + "", 10))}
+              </Space>
+              <Space>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  danger
+                  icon={<CloseCircleOutlined />}
+                  onClick={() => deleteConfirm(parseInt(record.id + "", 10))}
                 ></Button>
+              </Space>
             </Space>
-          </Space>
-          {contextHolder}
+            {contextHolder}
           </div>
         ) : null,
     },

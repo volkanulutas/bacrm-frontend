@@ -82,7 +82,7 @@ const CustomerDetailForm = () => {
       <Spin spinning={loading}>
         <Divider>Müşteri Detayı</Divider>
         <Form
-          labelCol={{ span: 4 }}
+          labelCol={{ span: 7 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
           disabled={componentDisabled}
@@ -136,7 +136,7 @@ const CustomerDetailForm = () => {
             <Button
               htmlType="submit"
               type="primary"
-              style={{ marginBottom: 16 }}
+              style={{ marginBottom: 16, marginLeft: 30 }}
             >
               Kaydet
             </Button>

@@ -135,12 +135,15 @@ const EmployeeDetailForm = () => {
 
   return (
     <>
+      {/* TODO: Rol Yönetiminde kullanılacak.
       <Checkbox
         checked={componentDisabled}
         onChange={(e) => setComponentDisabled(e.target.checked)}
       >
+ 
         Form disabled
       </Checkbox>
+       */}
       <Spin spinning={loading}>
         <Form
           labelCol={{ span: 4 }}
@@ -151,6 +154,9 @@ const EmployeeDetailForm = () => {
           onFinish={onFinish}
           form={form}
         >
+          <Form.Item label="No" name={"id"}>
+            <Input placeholder="İsim giriniz." disabled={true} />
+          </Form.Item>
           <Form.Item
             label="İsim"
             name={"name"}

@@ -13,7 +13,6 @@ import type { FilterConfirmProps } from "antd/es/table/interface";
 import moment from "moment";
 
 import { getAll, deleteUser } from "../../service/employee.service";
-import { getAllDepartment } from "../../service/department.service";
 
 interface Department {
   name: string;

@@ -72,7 +72,7 @@ const DepartmentDetailForm = () => {
       <Spin spinning={loading}>
         <Divider>Departman Detayı</Divider>
         <Form
-          labelCol={{ span: 4 }}
+          labelCol={{ span: 7 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
           disabled={componentDisabled}
@@ -107,7 +107,7 @@ const DepartmentDetailForm = () => {
             <Button
               htmlType="submit"
               type="primary"
-              style={{ marginBottom: 16 }}
+              style={{ marginBottom: 16, marginLeft: 30 }}
             >
               Kaydet
             </Button>

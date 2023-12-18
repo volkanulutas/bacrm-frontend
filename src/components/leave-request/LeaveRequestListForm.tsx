@@ -157,6 +157,7 @@ const LeaveRequestListForm = () => {
   const getData = async () => {
     await getAllLeaves()
       .then((res) => {
+        alert(JSON.stringify(res.data));
         setLoading(false);
         setDataSource(res.data);
       })
@@ -165,7 +166,7 @@ const LeaveRequestListForm = () => {
       });
   };
   const navigateTo = (id: React.Key) => {
-    navigation(`/leave-detail/${id}`);
+    navigation(`/leave-request-detail/${id}`);
   };
   return (
     <div>
