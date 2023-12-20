@@ -23,6 +23,8 @@ import {
   getLeaveById,
 } from "../../service/leave.service";
 
+import { getEmployeeById } from "../../service/employee.service";
+
 interface Leave {
   id: string;
   type: string;
@@ -123,23 +125,27 @@ const LeaveRequestDetailForm = () => {
   };
 
   const onFinish = (values: any) => {
-    const data = {
-      id: values.id,
-      type: values.type[1],
-      startDate: moment(values.startEndDate[0]).valueOf(),
-      endDate: moment(values.startEndDate[1]).valueOf(),
-      userId: authUserId(),
-      definition: values.definition,
-      status: "WAITING",
-    };
+    getEmployeeById(authUserId()).then((res) => {
+      const userData = res.data;
+      const data = {
+        id: values.id,
+        type: values.type[1],
+        startDate: moment(values.startEndDate[0]).valueOf(),
+        endDate: moment(values.startEndDate[1]).valueOf(),
+        user: userData,
+        definition: values.definition,
+        status: "WAITING",
+      };
+      alert(JSON.stringify(data));
 
-    addLeave(data).then((res) => {
-      setLoading(true);
-      setTimeout(() => {
-        form.resetFields();
-        setLoading(false);
-        navigate("/leave-request-list", { replace: true });
-      }, 500);
+      addLeave(data).then((res) => {
+        setLoading(true);
+        setTimeout(() => {
+          form.resetFields();
+          setLoading(false);
+          navigate("/leave-request-list", { replace: true });
+        }, 500);
+      });
     });
   };
 

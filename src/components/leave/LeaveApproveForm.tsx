@@ -3,13 +3,13 @@ import { Divider, Table, Space, Button, Input, Modal } from "antd";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { useParams, useNavigate } from "react-router-dom";
 import type { InputRef } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import moment from "moment";
 import authUserId from "../../service/auth-user-id";
-import { getApproveLeaves} from "../../service/leave.service";
-
+import { getApproveLeaves, addLeave } from "../../service/leave.service";
 
 interface User {
   id: number;
@@ -18,54 +18,106 @@ interface User {
 }
 
 interface Leave {
-  key: string;
+  id: string;
   type: string;
+  status: string;
   startDate: number;
   endDate: number;
   definition: string;
   workStartDate: number;
-  user: User,
+  user: User;
   employeeName: string;
+  rejectMessage: string;
 }
 type DataIndex = keyof Leave;
 
-
 const LeaveApproveForm = () => {
+  const navigation = useNavigate();
   const [searchText, setSearchText] = useState("");
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSource, setDataSource] = useState<Leave[]>([]);
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
   useEffect(() => {
     getData();
   }, []);
 
-  
   const getData = async () => {
+    const userId = authUserId();
     await getApproveLeaves(authUserId())
       .then((res) => {
-
-  
-    
-
-        res.data.employeeName = res.data.user.name + res.data.user.surname;
-        alert(JSON.stringify(res.data));
+        const data = res.data.map((item: Leave) => ({
+          id: item.id.toString(),
+          type: item.type,
+          status: item.status,
+          startDate: item.startDate,
+          endDate: item.endDate,
+          definition: item.definition,
+          workStartDate: item.workStartDate,
+          user: item.user,
+          employeeName: item.user.name + " " + item.user.surname, // Kullanıcı adı direkt olarak alınıyor
+        }));
+        setDataSource(data);
         setLoading(false);
-        setDataSource(res.data);
       })
       .catch((ex) => {
         setLoading(true);
       });
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const approveLeave = (id: string) => {
+    const leave = dataSource.find((item) => item.id === id);
+    if (leave) {
+      const data = {
+        id: leave.id.toString(),
+        type: leave.type,
+        status: "APPROVED",
+        startDate: leave.startDate,
+        endDate: leave.endDate,
+        definition: leave.definition,
+        user: leave.user,
+      };
+      addLeave(data).then((res) => {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          window.location.reload();
+        }, 500);
+      });
+    }
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const showModal = (id: string) => {
+    setIsModalOpen(true);
+    setSelectedItemId(id);
+  };
+
+  const reject = () => {
+    alert("reject");
+    if (selectedItemId) {
+      const leave = dataSource.find((item) => item.id === selectedItemId);
+      if (leave) {
+        const data = {
+          id: leave.id.toString(),
+          type: leave.type,
+          status: leave.status,
+          startDate: moment(leave.startDate).valueOf(),
+          endDate: moment(leave.endDate).valueOf(),
+          definition: leave.definition,
+          user: leave.user,
+        };
+        addLeave(data).then((res) => {
+          setLoading(true);
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
+        });
+        setIsModalOpen(false);
+      }
+    }
   };
 
   const handleCancel = () => {
@@ -86,9 +138,7 @@ const LeaveApproveForm = () => {
     setSearchText("");
   };
 
-  const getColumnSearchProps = (
-    dataIndex: DataIndex
-  ): ColumnType<Leave> => ({
+  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<Leave> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -224,8 +274,8 @@ const LeaveApproveForm = () => {
     {
       title: "İşlem",
       dataIndex: "action",
-      render: (_, record: { key: React.Key }) =>
-      dataSource.length >= 1 ? (
+      render: (_, record: { id: React.Key }) =>
+        dataSource.length >= 1 ? (
           <div>
             <Space>
               <Space>
@@ -234,6 +284,7 @@ const LeaveApproveForm = () => {
                   className="marginright"
                   shape="circle"
                   icon={<CheckCircleOutlined />}
+                  onClick={() => approveLeave(record.id + "")}
                 ></Button>
               </Space>
               <Space>
@@ -241,7 +292,7 @@ const LeaveApproveForm = () => {
                   type="primary"
                   danger
                   shape="circle"
-                  onClick={showModal}
+                  onClick={() => showModal(record.id + "")}
                   icon={<CloseCircleOutlined />}
                 ></Button>
               </Space>
@@ -260,10 +311,11 @@ const LeaveApproveForm = () => {
       <Table columns={columns} dataSource={dataSource} />
       <Modal
         title="Red Nedeni"
-        cancelButtonProps={{ style: { display: "none" } }}
+        // cancelButtonProps={{ style: { display: "none" } }}
         okText="Reddet"
+        cancelText="İptal"
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={() => reject()}
         onCancel={handleCancel}
       >
         <Input></Input>

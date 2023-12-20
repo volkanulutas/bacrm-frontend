@@ -39,7 +39,6 @@ export const getLeavesByUserId = (userId: string) => {
   });
 };
 
-
 export const getLeaveById = (id: string) => {
   return axios.get(API_BASE_URL + API_URL_LEAVE + "id/" + id, {
     headers: authHeader(),
@@ -47,7 +46,10 @@ export const getLeaveById = (id: string) => {
 };
 
 export const getApproveLeaves = (managerId: string) => {
-  return axios.get(API_BASE_URL + API_URL_LEAVE + "approve-leave/" + managerId, {
-    headers: authHeader(),
-  });
+  return axios.get(
+    API_BASE_URL + API_URL_LEAVE + "approve-leave/" + managerId,
+    {
+      headers: authHeader(),
+    }
+  );
 };
