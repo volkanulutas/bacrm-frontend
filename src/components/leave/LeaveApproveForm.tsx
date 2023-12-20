@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Divider, Table, Space, Button, Input, Modal } from "antd";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
@@ -6,46 +6,59 @@ import Highlighter from "react-highlight-words";
 import type { InputRef } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
+import moment from "moment";
+import authUserId from "../../service/auth-user-id";
+import { getApproveLeaves} from "../../service/leave.service";
 
-interface DataType {
-  key: string;
-  employeeName: string;
-  leaveType: string;
-  leaveStartDate: number;
-  leaveEndDate: number;
-  workStartDate: number;
+
+interface User {
+  id: number;
+  name: string;
+  surname: string;
 }
-type DataIndex = keyof DataType;
 
-const data: DataType[] = [
-  {
-    key: "1",
-    employeeName: "Derya Taş",
-    leaveType: "Yıllık izin",
-    leaveStartDate: 1694979873986,
-    leaveEndDate: 16949798738986,
-    workStartDate: 1694979873956,
-  },
-  {
-    key: "2",
-    employeeName: "Volkan Ulutaş",
-    leaveType: "Mazeret izni",
-    leaveStartDate: 1594979873986,
-    leaveEndDate: 1594979873986,
-    workStartDate: 1594979873986,
-  },
-];
+interface Leave {
+  key: string;
+  type: string;
+  startDate: number;
+  endDate: number;
+  definition: string;
+  workStartDate: number;
+  user: User,
+  employeeName: string;
+}
+type DataIndex = keyof Leave;
 
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
 
 const LeaveApproveForm = () => {
   const [searchText, setSearchText] = useState("");
+  const [dataSource, setDataSource] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  
+  const getData = async () => {
+    await getApproveLeaves(authUserId())
+      .then((res) => {
+
+  
+    
+
+        res.data.employeeName = res.data.user.name + res.data.user.surname;
+        alert(JSON.stringify(res.data));
+        setLoading(false);
+        setDataSource(res.data);
+      })
+      .catch((ex) => {
+        setLoading(true);
+      });
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -75,7 +88,7 @@ const LeaveApproveForm = () => {
 
   const getColumnSearchProps = (
     dataIndex: DataIndex
-  ): ColumnType<DataType> => ({
+  ): ColumnType<Leave> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -164,7 +177,7 @@ const LeaveApproveForm = () => {
       ),
   });
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<Leave> = [
     {
       title: "Çalışan Adı",
       dataIndex: "employeeName",
@@ -173,28 +186,28 @@ const LeaveApproveForm = () => {
       ...getColumnSearchProps("employeeName"),
     },
     {
-      title: "İzin Tipi",
-      dataIndex: "leaveType",
-      key: "leaveType",
+      title: "İzin Türü",
+      dataIndex: "type",
+      key: "type",
       width: "20%",
-      ...getColumnSearchProps("leaveType"),
+      ...getColumnSearchProps("type"),
     },
     {
-      title: "Başlangıç Tarihi",
-      dataIndex: "leaveStartDate",
-      key: "leaveStartDate",
-      ...getColumnSearchProps("leaveStartDate"),
-      render: (date: number) => getFullDate(date),
-      sorter: (a, b) => a.leaveStartDate - b.leaveStartDate,
+      title: "İzin Başlangıcı",
+      dataIndex: "startDate",
+      key: "startDate",
+      ...getColumnSearchProps("startDate"),
+      render: (date: number) => moment(date).format("DD/MM/YYYY HH:mm:ss"),
+      sorter: (a, b) => a.startDate - b.startDate,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Bitiş Tarihi",
-      dataIndex: "leaveEndDate",
-      key: "leaveEndDate",
-      ...getColumnSearchProps("leaveEndDate"),
-      render: (date: number) => getFullDate(date),
-      sorter: (a, b) => a.leaveEndDate - b.leaveEndDate,
+      title: "İzin Bitişi",
+      dataIndex: "endDate",
+      key: "endDate",
+      ...getColumnSearchProps("endDate"),
+      render: (date: number) => moment(date).format("DD/MM/YYYY HH:mm:ss"),
+      sorter: (a, b) => a.endDate - b.endDate,
 
       sortDirections: ["descend", "ascend"],
     },
@@ -204,7 +217,7 @@ const LeaveApproveForm = () => {
       dataIndex: "workStartDate",
       key: "workStartDate",
       ...getColumnSearchProps("workStartDate"),
-      render: (date: number) => getFullDate(date),
+      render: (date: number) => moment(date).format("DD/MM/YYYY HH:mm:ss"),
       sorter: (a, b) => a.workStartDate - b.workStartDate,
       sortDirections: ["descend", "ascend"],
     },
@@ -212,7 +225,7 @@ const LeaveApproveForm = () => {
       title: "İşlem",
       dataIndex: "action",
       render: (_, record: { key: React.Key }) =>
-        data.length >= 1 ? (
+      dataSource.length >= 1 ? (
           <div>
             <Space>
               <Space>
@@ -244,7 +257,7 @@ const LeaveApproveForm = () => {
         <h2>İzin Onay Formu</h2>
         <Divider orientation="center">İzin Talepleri</Divider>
       </Space>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={dataSource} />
       <Modal
         title="Red Nedeni"
         cancelButtonProps={{ style: { display: "none" } }}

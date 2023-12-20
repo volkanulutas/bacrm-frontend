@@ -33,8 +33,21 @@ export const getAllLeaves = () => {
   });
 };
 
+export const getLeavesByUserId = (userId: string) => {
+  return axios.get(API_BASE_URL + API_URL_LEAVE + "userId/" + userId, {
+    headers: authHeader(),
+  });
+};
+
+
 export const getLeaveById = (id: string) => {
-  return axios.get(API_BASE_URL + API_URL_LEAVE + id, {
+  return axios.get(API_BASE_URL + API_URL_LEAVE + "id/" + id, {
+    headers: authHeader(),
+  });
+};
+
+export const getApproveLeaves = (managerId: string) => {
+  return axios.get(API_BASE_URL + API_URL_LEAVE + "approve-leave/" + managerId, {
     headers: authHeader(),
   });
 };

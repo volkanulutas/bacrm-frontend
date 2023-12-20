@@ -13,13 +13,7 @@ interface Department {
   name: string;
   description: string;
 }
-
 type DataIndex = keyof Department;
-
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
 
 const DepartmentListForm = () => {
   const navigation = useNavigate();
@@ -56,7 +50,6 @@ const DepartmentListForm = () => {
       dataIndex: "name",
       filterSearch: true,
       width: "10%",
-      // TODO:    ...getColumnSearchProps('name'),
       sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["descend", "ascend"],
     },
@@ -65,7 +58,6 @@ const DepartmentListForm = () => {
       dataIndex: "description",
       filterSearch: true,
       width: "25%",
-      // TODO:    ...getColumnSearchProps('definition'),
       sorter: (a, b) => a.description.localeCompare(b.description),
       sortDirections: ["descend", "ascend"],
     },

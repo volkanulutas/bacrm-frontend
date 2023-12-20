@@ -21,11 +21,6 @@ interface Customer {
 
 type DataIndex = keyof Customer;
 
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
-
 const CustomerListForm = () => {
   const navigation = useNavigate();
   const [dataSource, setDataSource] = useState([]);

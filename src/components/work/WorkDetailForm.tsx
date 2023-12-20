@@ -26,16 +26,6 @@ interface Work {
   planningDate: number;
 }
 
-export const getMillisDate = (dateStr: string): number => {
-  let date = new Date(dateStr);
-  return date.getTime();
-};
-
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
-
 const WorkDetailForm = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -73,10 +63,10 @@ const WorkDetailForm = () => {
     const data = {
       id: values.id,
       definition: values.definition,
-      endDate: getMillisDate(values.endDate),
+      endDate: moment(values.endDate).valueOf(),
       name: values.name,
-      planningDate: getMillisDate(values.planningDate),
-      startDate: getMillisDate(values.startDate),
+      planningDate: moment(values.planningDate).valueOf(),
+      startDate: moment(values.startDate).valueOf(),
       workloadHour: values.workloadHour,
     };
     createWork(data).then((res) => {

@@ -34,10 +34,6 @@ interface Employee {
 }
 type DataIndex = keyof Employee;
 
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
 const EmployeeListForm = () => {
   const navigation = useNavigate();
   const [searchText, setSearchText] = useState("");

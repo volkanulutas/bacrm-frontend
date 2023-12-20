@@ -130,6 +130,7 @@ const LeaveRequestDetailForm = () => {
       endDate: moment(values.startEndDate[1]).valueOf(),
       userId: authUserId(),
       definition: values.definition,
+      status: "WAITING",
     };
 
     addLeave(data).then((res) => {

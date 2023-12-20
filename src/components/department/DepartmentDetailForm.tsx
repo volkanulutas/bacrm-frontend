@@ -15,16 +15,6 @@ interface Department {
   description: string;
 }
 
-export const getMillisDate = (dateStr: string): number => {
-  let date = new Date(dateStr);
-  return date.getTime();
-};
-
-export const getFullDate = (dateNum: number): string => {
-  let date = new Date(dateNum);
-  return date.toDateString();
-};
-
 const DepartmentDetailForm = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
