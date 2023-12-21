@@ -25,15 +25,30 @@ import {
 
 import { getEmployeeById } from "../../service/employee.service";
 
+interface LeaveType {
+  label: string;
+  value: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  surname: string;
+  startDate:number,
+}
+
 interface Leave {
   id: string;
-  type: string;
+  type: LeaveType;
+  typeLabel: string;
   status: string;
   startDate: number;
   endDate: number;
   definition: string;
-  userId: number;
-  leaveApproveStatus: string;
+  workStartDate: number;
+  user: User;
+  employeeName: string;
+  rejectMessage: string;
 }
 
 interface Option {
@@ -101,11 +116,11 @@ const LeaveRequestDetailForm = () => {
         id: data.id,
         type: data.type,
         status: data.status,
+        typeLabel: data.type.label,
         startDate: data.startDate,
         endDate: data.endDate,
         definition: data.definition,
-        userId: data.userId,
-        leaveApproveStatus: data.leaveApproveStatus,
+        user: data.user,
       });
     });
   };
@@ -129,15 +144,13 @@ const LeaveRequestDetailForm = () => {
       const userData = res.data;
       const data = {
         id: values.id,
-        type: values.type[1],
+        type: { label: values.type[1], value: values.type.value},
         startDate: moment(values.startEndDate[0]).valueOf(),
         endDate: moment(values.startEndDate[1]).valueOf(),
         user: userData,
         definition: values.definition,
         status: "WAITING",
       };
-      alert(JSON.stringify(data));
-
       addLeave(data).then((res) => {
         setLoading(true);
         setTimeout(() => {
@@ -175,18 +188,13 @@ const LeaveRequestDetailForm = () => {
               className="bacrm-date-picker"
             />
           </Form.Item>
-          <Form.Item label="İşe Başlama Tarihi">
-            <DatePicker
-              placeholder="İşe Başlama Tarihi"
-              className="bacrm-date-picker"
-            />
-          </Form.Item>
+        
           <Form.Item label="Açıklama" name="definition">
             <TextArea rows={4} />
           </Form.Item>
           <Form.Item
-            name="type"
-            label="İzin Tipi:"
+            name="typeLabel"
+            label="İzin Türü:"
             rules={[{ required: true }]}
           >
             <Cascader

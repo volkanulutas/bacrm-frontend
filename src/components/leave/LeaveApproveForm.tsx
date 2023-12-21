@@ -11,15 +11,22 @@ import moment from "moment";
 import authUserId from "../../service/auth-user-id";
 import { getApproveLeaves, addLeave } from "../../service/leave.service";
 
+interface LeaveType {
+  label: string;
+  value: string;
+}
+
 interface User {
   id: number;
   name: string;
   surname: string;
+  startDate:number,
 }
 
 interface Leave {
   id: string;
-  type: string;
+  type: LeaveType;
+  typeLabel: string;
   status: string;
   startDate: number;
   endDate: number;
@@ -40,6 +47,7 @@ const LeaveApproveForm = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [ rejectMessage, setRejectMessage ] = useState<string | null> (null); 
 
   useEffect(() => {
     getData();
@@ -52,6 +60,7 @@ const LeaveApproveForm = () => {
         const data = res.data.map((item: Leave) => ({
           id: item.id.toString(),
           type: item.type,
+          typeLabel: item.type.label,
           status: item.status,
           startDate: item.startDate,
           endDate: item.endDate,
@@ -73,7 +82,7 @@ const LeaveApproveForm = () => {
     if (leave) {
       const data = {
         id: leave.id.toString(),
-        type: leave.type,
+        type: { label: leave.type.label, value: leave.type.value},
         status: "APPROVED",
         startDate: leave.startDate,
         endDate: leave.endDate,
@@ -96,23 +105,24 @@ const LeaveApproveForm = () => {
   };
 
   const reject = () => {
-    alert("reject");
     if (selectedItemId) {
       const leave = dataSource.find((item) => item.id === selectedItemId);
       if (leave) {
         const data = {
           id: leave.id.toString(),
-          type: leave.type,
-          status: leave.status,
+         type: { label: leave.type.label, value: leave.type.value},
+          status: "REJECTED",
           startDate: moment(leave.startDate).valueOf(),
           endDate: moment(leave.endDate).valueOf(),
           definition: leave.definition,
           user: leave.user,
+          rejectMessage: rejectMessage,
         };
         addLeave(data).then((res) => {
           setLoading(true);
           setTimeout(() => {
             setLoading(false);
+            window.location.reload();
           }, 500);
         });
         setIsModalOpen(false);
@@ -237,10 +247,10 @@ const LeaveApproveForm = () => {
     },
     {
       title: "İzin Türü",
-      dataIndex: "type",
-      key: "type",
+      dataIndex: "typeLabel",
+      key: "typeLabel",
       width: "20%",
-      ...getColumnSearchProps("type"),
+      ...getColumnSearchProps("typeLabel"),
     },
     {
       title: "İzin Başlangıcı",
@@ -312,13 +322,18 @@ const LeaveApproveForm = () => {
       <Modal
         title="Red Nedeni"
         // cancelButtonProps={{ style: { display: "none" } }}
+        
         okText="Reddet"
         cancelText="İptal"
         open={isModalOpen}
         onOk={() => reject()}
         onCancel={handleCancel}
       >
-        <Input></Input>
+        <Input 
+         placeholder="Red Nedenini Giriniz."
+         value={rejectMessage || ''}
+         onChange={(e) => setRejectMessage(e.target.value)}
+         ></Input>
       </Modal>
     </div>
   );
