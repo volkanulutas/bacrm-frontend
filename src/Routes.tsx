@@ -40,7 +40,7 @@ const MainRoutes = () => (
   <Routes>
     {/** Protected Routes */}
     {/** Wrap all Route under ProtectedRoutes element */}
-    <Route path="/" element={<ProtectedRoutes />}>
+    <Route path="/" /*element={<ProtectedRoutes  />}*/>
       <Route path="/" element={<InnerContent />}>
         <Route path="/" element={<Navigate replace to="dashboard" />} />
         <Route path="dashboard" element={<Dashboard />} />
